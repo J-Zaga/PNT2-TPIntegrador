@@ -78,6 +78,7 @@ input {
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 16px;
+  box-sizing: border-box; 
 }
 
 input:focus {
@@ -102,6 +103,9 @@ button[type="submit"]:hover {
 
 .links {
   margin-top: 20px;
+  display: flex;
+  justify-content: center; 
+  gap: 10px;
 }
 
 .text-button {
