@@ -43,6 +43,8 @@ function GoToHome(){
       <button type="submit">Crear</button>
     </form>
 
+    <p v-if="errorMessage">{{ errorMessage }}</p>
+
     <div class="links">
       <button class="text-button" @click="GoToLogin">Log-In</button>
       <span>&nbsp;&nbsp;</span>

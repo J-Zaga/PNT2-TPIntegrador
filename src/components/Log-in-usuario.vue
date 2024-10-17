@@ -37,6 +37,8 @@ function GoToSignIn(){
       <button type="submit">Iniciar Sesion</button>
     </form>
 
+    <p v-if="errorMessage">{{ errorMessage }}</p>
+
     <div class="links">
       <button class="text-button" @click="GoToSignIn">Sign-In</button>
       <span>&nbsp;&nbsp;</span>
