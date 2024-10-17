@@ -5,9 +5,9 @@ import LoginPrestador from '../components/Log-in-administrador.vue'
 
 const routes = [
     {
-      path: '/usuario',
-      name: 'Login Usuario',
-      component: LoginUsuario,
+        path: '/usuario',
+        name: 'Login Usuario',
+        component: LoginUsuario,
     },
     {
         path: '/administrador',
