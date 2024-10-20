@@ -2,53 +2,58 @@
 import { ref } from 'vue'
 import { userStore } from '../stores/userStore'
 import { useRouter } from 'vue-router'
+import Header from './Header.vue';
 const router = useRouter()
 
 const username = ref('')
 const password = ref('')
 const errorMessage = ref('')
+const prestador = ref(false)
 
 async function SignIn() {
   const usuarioEncontrado = await userStore.usuarios.find(user => user.usuario === username.value)
   if (usuarioEncontrado) {
     alert('Esa cuenta ya existe')
+    errorMessage.value = ''
   } else if (username.value.length > 4 && password.value.length > 4) {
     const user = {
       usuario: username.value,
-      password: password.value
+      password: password.value,
     }
-    userStore.addUser(user)
-    alert('Usuario Creado')
+    if(prestador.value === true){
+      userStore.addPrestador(user)
+      alert("prestador creado")
+    }else{
+      userStore.addUsuario(user)
+      alert("consumidor creado")
+    }
+    errorMessage.value = ''
+    router.push('/login')
   } else {
     errorMessage.value = 'El nombre de usuario y la contraseña deben tener más de 4 caracteres'
   }
 }
 
 function GoToLogin() {
-  router.push('/usuario')
-}
-function GoToHome(){
-  router.push('/')
+  router.push('/login')
 }
 
 </script>
 
 <template>
   <div class="form-container">
+    <Header v-bind:hideButtons="true" />
     <h2>Crear Cuenta</h2>
     <form @submit.prevent="SignIn">
       <input v-model="username" type="text" id="username" placeholder="Nombre usuario" required />
       <input v-model="password" type="password" id="password" placeholder="Contraseña" required />
-
+      Prestador<input type="checkbox" v-model="prestador" />
       <button type="submit">Crear</button>
     </form>
-
     <p v-if="errorMessage">{{ errorMessage }}</p>
 
     <div class="links">
       <button class="text-button" @click="GoToLogin">Log-In</button>
-      <span>&nbsp;&nbsp;</span>
-      <button class="text-button" @click="GoToHome">Regresar</button>
     </div>
   </div>
 </template>
@@ -89,13 +94,13 @@ input {
 }
 
 input:focus {
-  border-color: #0073b1;
+  border-color: #9a67e2;
   outline: none;
 }
 
 button[type="submit"] {
   width: 100%;
-  background-color: #0073b1;
+  background-color: #9a67e2;
   color: white;
   padding: 12px;
   font-size: 16px;
@@ -105,7 +110,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-  background-color: #005582;
+  background-color: #9a67e2;
 }
 
 .links {
@@ -118,14 +123,14 @@ button[type="submit"]:hover {
 .text-button {
   background: none;
   border: none;
-  color: #0073b1;
+  color: #9a67e2;
   text-decoration: underline;
   cursor: pointer;
   font-size: 16px;
 }
 
 .text-button:hover {
-  color: #005582;
+  color: #9a67e2;
 }
 
 .text-button:focus {

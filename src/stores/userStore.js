@@ -7,8 +7,21 @@ export const userStore = reactive({
     password: "123"
   }
   ],
+  prestadores:[{
+    usuario: "adios",
+    password: "asd"
+  }
+  ],
+  administradores:[{
+    usuario: "juan",
+    password: "1234"
+  }],
 
-  addUser(newUser) {
+  addPrestador(newUser){
+    this.prestadores.push(newUser)
+  },
+
+  addUsuario(newUser) {
     this.usuarios.push(newUser)
   }
 })
