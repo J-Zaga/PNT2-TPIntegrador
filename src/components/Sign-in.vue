@@ -2,8 +2,8 @@
 import { ref } from 'vue'
 import { useUserStore } from '../stores/userStore'
 import { useRouter } from 'vue-router'
-import Header from './Header.vue';
 const router = useRouter()
+const store = useUserStore()
 
 const username = ref('')
 const password = ref('')
@@ -11,26 +11,26 @@ const errorMessage = ref('')
 const prestador = ref(false)
 
 async function SignIn() {
-  const usuarioEncontrado = await useUserStore.usuarios.find(user => user.usuario === username.value)
-  if (usuarioEncontrado) {
-    alert('Esa cuenta ya existe')
-    errorMessage.value = ''
-  } else if (username.value.length > 4 && password.value.length > 4) {
-    const user = {
-      usuario: username.value,
-      password: password.value,
+  try {
+    let usuarioEncontrado = store.usuarios.find(user => user.usuario === username.value)
+    if (!usuarioEncontrado) {
+      if (username.value.length > 4 && password.value.length > 4) {
+        store.addUser({
+          usuario: username.value,
+          password: password.value,
+          tipo: prestador.value ? 'prestador' : 'usuario',
+        })
+        alert('Cuenta creada')
+        router.push('/login')
+      } else {
+        errorMessage.value = "El nombre de usuario y la contraseña deben tener mas de 4 caracteres"
+      }
+    } else {
+      errorMessage.value = "Esa cuenta ya existe"
     }
-    if(prestador.value === true){
-      userStore.addPrestador(user)
-      alert("prestador creado")
-    }else{
-      userStore.addUsuario(user)
-      alert("consumidor creado")
-    }
-    errorMessage.value = ''
-    router.push('/login')
-  } else {
-    errorMessage.value = 'El nombre de usuario y la contraseña deben tener más de 4 caracteres'
+  } catch (error) {
+    console.error('Error:', error)
+    errorMessage.value = 'Ocurrió un error inesperado'
   }
 }
 
@@ -42,7 +42,6 @@ function GoToLogin() {
 
 <template>
   <div class="form-container">
-    <Header v-bind:hideButtons="true" />
     <h2>Crear Cuenta</h2>
     <form @submit.prevent="SignIn">
       <input v-model="username" type="text" id="username" placeholder="Nombre usuario" required />
@@ -90,7 +89,7 @@ input {
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 16px;
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
 
 input:focus {
@@ -116,7 +115,7 @@ button[type="submit"]:hover {
 .links {
   margin-top: 20px;
   display: flex;
-  justify-content: center; 
+  justify-content: center;
   gap: 10px;
 }
 

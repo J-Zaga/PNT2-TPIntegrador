@@ -1,15 +1,15 @@
 <script setup>
-import { ref, computed } from "vue"
-import { useRouter }  from 'vue-router'
+import { computed } from "vue"
+import { useRoute }  from 'vue-router'
 import { useUserStore } from "../stores/userStore";
 
-const router = useRouter()
+const route = useRoute()
 const user = useUserStore()
 
 
 const usuarioActual = computed(() => user.usuarioRegistrado)
 const tipo = computed(() => usuarioActual.value ? usuarioActual.value.tipo : null)
-
+const enLoginOSignin = computed(() => route.path === '/login' || route.path === '/signin')
 
 
 function logOut(){
@@ -25,8 +25,8 @@ function logOut(){
         <ul class="nav-list">
           <li class="nav-item"><router-link to="/dashboard" v-if="tipo == 'admin'">Dashboard</router-link></li>
           <li class="nav-item"><router-link to="/formulario-servicio" v-if="tipo == 'prestador'">Publicar</router-link></li>
-          <li class="nav-item" v-if="!usuarioActual"><router-link to="/login">Iniciar Sesión</router-link></li>
-          <li class="nav-item" v-if="!usuarioActual"><router-link to="/signin">Registrarse</router-link></li>
+          <li class="nav-item" v-if="!usuarioActual && !enLoginOSignin"><router-link to="/login">Iniciar Sesión</router-link></li>
+          <li class="nav-item" v-if="!usuarioActual && !enLoginOSignin"><router-link to="/signin">Registrarse</router-link></li>
           <li class="nav-item"><router-link to="/carrito" v-if="tipo == 'usuario'"><i class="fas fa-shopping-cart"></i></router-link></li>
           <li class="nav-item" v-if="usuarioActual"><router-link to="/" @click="logOut">Cerrar Sesión</router-link></li>
         </ul>

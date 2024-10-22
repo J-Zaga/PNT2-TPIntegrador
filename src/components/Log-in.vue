@@ -17,6 +17,8 @@ async function Login() {
       store.usuarioRegistrado = usuarioEncontrado
       alert('Login exitoso')
       router.push('/')
+    }else{
+      errorMessage.value = "Usuario o contraseña incorrectos"
     }
   } catch (error) {
     console.error('Error durante el login:', error)

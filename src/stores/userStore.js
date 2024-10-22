@@ -24,7 +24,10 @@ export const useUserStore = defineStore("userStore", () => {
   ])
 
   const userSize = computed(() => usuarios.value.length)
-  const addUser = (user) => usuarios.value.push(user)
+  function addUser(nuevoUsuario) {
+    const id = usuarios.value.length + 1; 
+    usuarios.value.push({ id, ...nuevoUsuario });
+  }
   const usuarioRegistrado = ref(null)
 
   return { userSize, addUser, usuarios, usuarioRegistrado }
