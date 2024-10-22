@@ -2,7 +2,6 @@
 import { ref } from 'vue'
 import { useUserStore } from '../stores/userStore'
 import { useRouter } from 'vue-router'
-import Header from './Header.vue'
 
 const router = useRouter()
 const store = useUserStore()
@@ -19,7 +18,6 @@ async function Login() {
       alert('Login exitoso')
       router.push('/')
     }
-    
   } catch (error) {
     console.error('Error durante el login:', error)
     errorMessage.value = 'Ocurrió un error inesperado'
@@ -33,7 +31,6 @@ function GoToSignIn(){
 
 <template>
   <div class="form-container">
-    <Header v-bind:hideButtons="true"/>
     <h2>Iniciar Sesión</h2>
     <form @submit.prevent="Login">
       <input v-model="username" type="text" id="username" placeholder="Nombre usuario" required />
