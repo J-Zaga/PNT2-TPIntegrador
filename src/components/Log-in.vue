@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router'
 import Header from './Header.vue'
 
 const router = useRouter()
+const store = userStore()
 
 const username = ref('')
 const password = ref('')
@@ -13,25 +14,11 @@ const errorMessage = ref('')
 async function Login() {
   try {
     let usuarioEncontrado = userStore.usuarios.find(user => user.usuario === username.value)
-    let tipoUsuario = "usuario"
-    if (!usuarioEncontrado) {
-      usuarioEncontrado = userStore.prestadores.find(user => user.usuario === username.value)
-      tipoUsuario = "prestador"
-    }
-    if (!usuarioEncontrado) {
-      usuarioEncontrado = userStore.administradores.find(user => user.usuario === username.value)
-      tipoUsuario = "administrador"
-    }
     if (usuarioEncontrado && usuarioEncontrado.password === password.value) {
       alert('Login exitoso')
-      localStorage.setItem('usuarioActual', JSON.stringify({
-        usuario: usuarioEncontrado.usuario,
-        tipo: tipoUsuario
-      }));
-      router.push('/')
-    } else {
-      errorMessage.value = 'Usuario o contraseña incorrectos'
+      router.push('/home')
     }
+    
   } catch (error) {
     console.error('Error durante el login:', error)
     errorMessage.value = 'Ocurrió un error inesperado'
