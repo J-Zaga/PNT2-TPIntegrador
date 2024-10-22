@@ -1,21 +1,22 @@
 <script setup>
-import { ref } from "vue"
+import { ref, computed } from "vue"
 import { useRouter }  from 'vue-router'
+import { useUserStore } from "../stores/userStore";
 
 const router = useRouter()
+const user = useUserStore()
 
 const props = defineProps({
     hideButtons: {type: Boolean, default: false}
 })
 
+const usuarioActual = computed(() => user.usuarioRegistrado)
+const tipo = computed(() => usuarioActual.value ? usuarioActual.value.tipo : null)
 
-const usuarioActual =  ref(JSON.parse(localStorage.getItem('usuarioActual')) || null)
-const tipoUsuario = ref(usuarioActual.value ? usuarioActual.value.tipo : null)
+
 
 function logOut(){
-  localStorage.removeItem('usuarioActual')
-  usuarioActual.value = null
-  tipoUsuario.value = null
+  user.usuarioRegistrado = null
 } 
 
 </script>
@@ -25,11 +26,11 @@ function logOut(){
       <router-link to="/" class="mascot-button">MascotApp</router-link>
       <nav>
         <ul class="nav-list">
-          <li class="nav-item"><router-link to="/dashboard" v-if="!hideButtons && tipoUsuario == 'administrador'">Dashboard</router-link></li>
-          <li class="nav-item"><router-link to="/formulario-servicio" v-if="!hideButtons && tipoUsuario == 'prestador'">Publicar</router-link></li>
+          <li class="nav-item"><router-link to="/dashboard" v-if="!hideButtons && tipo == 'admin'">Dashboard</router-link></li>
+          <li class="nav-item"><router-link to="/formulario-servicio" v-if="!hideButtons && tipo == 'prestador'">Publicar</router-link></li>
           <li class="nav-item" v-if="!usuarioActual"><router-link to="/login" v-if="!hideButtons">Iniciar Sesión</router-link></li>
           <li class="nav-item" v-if="!usuarioActual"><router-link to="/signin" v-if="!hideButtons">Registrarse</router-link></li>
-          <li class="nav-item"><router-link to="/carrito" v-if="!hideButtons && tipoUsuario == 'usuario'"><i class="fas fa-shopping-cart"></i></router-link></li>
+          <li class="nav-item"><router-link to="/carrito" v-if="!hideButtons && tipo == 'usuario'"><i class="fas fa-shopping-cart"></i></router-link></li>
           <li class="nav-item" v-if="usuarioActual"><router-link to="/" @click="logOut">Cerrar Sesión</router-link></li>
         </ul>
       </nav>

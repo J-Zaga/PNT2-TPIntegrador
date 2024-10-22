@@ -1,11 +1,11 @@
 <script setup>
 import { ref } from 'vue'
-import { userStore } from '../stores/userStore'
+import { useUserStore } from '../stores/userStore'
 import { useRouter } from 'vue-router'
 import Header from './Header.vue'
 
 const router = useRouter()
-const store = userStore()
+const store = useUserStore()
 
 const username = ref('')
 const password = ref('')
@@ -13,10 +13,11 @@ const errorMessage = ref('')
 
 async function Login() {
   try {
-    let usuarioEncontrado = userStore.usuarios.find(user => user.usuario === username.value)
+    let usuarioEncontrado = store.usuarios.find(user => user.usuario === username.value)
     if (usuarioEncontrado && usuarioEncontrado.password === password.value) {
+      store.usuarioRegistrado = usuarioEncontrado
       alert('Login exitoso')
-      router.push('/home')
+      router.push('/')
     }
     
   } catch (error) {

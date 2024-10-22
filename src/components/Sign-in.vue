@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { userStore } from '../stores/userStore'
+import { useUserStore } from '../stores/userStore'
 import { useRouter } from 'vue-router'
 import Header from './Header.vue';
 const router = useRouter()
@@ -11,7 +11,7 @@ const errorMessage = ref('')
 const prestador = ref(false)
 
 async function SignIn() {
-  const usuarioEncontrado = await userStore.usuarios.find(user => user.usuario === username.value)
+  const usuarioEncontrado = await useUserStore.usuarios.find(user => user.usuario === username.value)
   if (usuarioEncontrado) {
     alert('Esa cuenta ya existe')
     errorMessage.value = ''

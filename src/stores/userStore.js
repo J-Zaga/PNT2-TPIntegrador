@@ -1,5 +1,5 @@
-import { defineStore } from "pinia";
-import { computed, ref } from "vue";
+import { defineStore } from "pinia"
+import { computed, ref } from "vue"
 
 export const useUserStore = defineStore("userStore", () => {
   const usuarios = ref([
@@ -21,11 +21,11 @@ export const useUserStore = defineStore("userStore", () => {
       password: "1234",
       tipo: "admin",
     },
-  ]);
+  ])
 
-  const userSize = computed(() => usuarios.value.length);
-  const addUser = (user) => usuarios.value.push(user);
+  const userSize = computed(() => usuarios.value.length)
+  const addUser = (user) => usuarios.value.push(user)
   const usuarioRegistrado = ref(null)
 
-  return { userSize, addUser, usuarios, usuarioRegistrado };
-});
+  return { userSize, addUser, usuarios, usuarioRegistrado }
+})
