@@ -17,25 +17,25 @@ const filteredServices = computed(() => {
 </script>
 
 <template>
-  <div class="home-container">
-    <div class="filters" v-if="usuarioActual">
-      <input
-        type="text"
-        placeholder="Buscar por nombre"
-        v-model="searchQuery"
-        aria-label="Buscar servicios por nombre"
-      />
-    </div>
+    <div class="home-container">
+        <div class="filters" v-if="usuarioActual">
+            <input
+                type="text"
+                placeholder="Buscar por nombre"
+                v-model="searchQuery"
+                aria-label="Buscar servicios por nombre"
+            />
+        </div>
   
     <section class="services">
-      <div v-if="filteredServices.length === 0" class="no-results">
-        <p>No se encontraron servicios.</p>
-      </div>
-      <div v-for="servicio in filteredServices" :key="servicio.id" class="service-card">
-        <h4>{{ servicio.nombre }}</h4>
-        <p>{{ servicio.descripcion }}</p>
-        <p>Precio: {{ servicio.precio }}</p>
-      </div>
+        <div v-if="filteredServices.length === 0" class="no-results">
+            <p>No se encontraron servicios.</p>
+        </div>
+        <div v-for="servicio in filteredServices" :key="servicio.id" class="service-card">
+            <h4>{{ servicio.nombre }}</h4>
+            <p>{{ servicio.descripcion }}</p>
+            <p>Precio: {{ servicio.precio }}</p>
+        </div>
     </section>
   </div>
 </template>
