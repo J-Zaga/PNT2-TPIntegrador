@@ -36,8 +36,8 @@ function logOut(){
   
 <style scoped>
   .header {
-    background-color: #9a67e2; 
-    color: white;
+    background-color: #b496b3; 
+    color: rgb(255, 255, 255);
     padding: 10px 20px; 
     position: fixed; 
     top: 0; 
@@ -62,7 +62,7 @@ function logOut(){
   }
   
   .mascot-button, .nav-item a {
-    color: white; 
+    color: rgb(255, 255, 255); 
     text-decoration: none; 
     font-size: 16px; 
     cursor: pointer; 
