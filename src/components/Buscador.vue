@@ -1,18 +1,19 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, defineEmits } from 'vue'
 
-const buscador = ref('')
+const searchQuery = ref('')
+const emit = defineEmits(['update:searchQuery'])
 
+function updateSearch() {
+  emit('update:searchQuery', searchQuery.value)
+}
 </script>
-
 
 <template>
     <div>
-        <input v-model="buscador" type="text" id="buscador" placeholder="Buscar" required />
+        <input type="text" placeholder="Buscar por nombre.." v-model="searchQuery" @input="updateSearch"/>
     </div>
 </template>
 
-
-
-
-<style scoped></style>
+<style scoped>
+</style>

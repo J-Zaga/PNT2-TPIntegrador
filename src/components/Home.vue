@@ -2,30 +2,24 @@
 import { ref, computed } from 'vue'
 import { useServiceStore } from '../stores/serviceStore'
 import { useUserStore } from "../stores/userStore"
+import Buscador from './Buscador.vue';
 
 const store = useServiceStore()
 const user = useUserStore()
 
-const searchQuery = ref('')
+const busqueda = ref('')
 const usuarioActual = computed(() => user.usuarioRegistrado)
 
 const filteredServices = computed(() => {
   return store.servicios.filter(servicio => 
-    servicio.nombre.toLowerCase().includes(searchQuery.value.toLowerCase())
+    servicio.nombre.toLowerCase().includes(busqueda.value.toLowerCase())
   )
 })
 </script>
 
 <template>
     <div class="home-container">
-        <div class="filters" v-if="usuarioActual">
-            <input
-                type="text"
-                placeholder="Buscar por nombre"
-                v-model="searchQuery"
-                aria-label="Buscar servicios por nombre"
-            />
-        </div>
+    <Buscador v-model:searchQuery="busqueda"/>
   
     <section class="services">
         <div v-if="filteredServices.length === 0" class="no-results">
