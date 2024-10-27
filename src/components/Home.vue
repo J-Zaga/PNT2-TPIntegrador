@@ -2,35 +2,42 @@
 import { ref, computed } from 'vue'
 import { useServiceStore } from '../stores/serviceStore'
 import { useUserStore } from "../stores/userStore"
+import { useCarritoStore } from '../stores/carritoStore'
 import Buscador from './Buscador.vue';
 
 const store = useServiceStore()
 const user = useUserStore()
+const carritoStore = useCarritoStore()
 
 const busqueda = ref('')
 const usuarioActual = computed(() => user.usuarioRegistrado)
 
 const filteredServices = computed(() => {
-  return store.servicios.filter(servicio => 
-    servicio.nombre.toLowerCase().includes(busqueda.value.toLowerCase())
-  )
+    return store.servicios.filter(servicio => 
+        servicio.nombre.toLowerCase().includes(busqueda.value.toLowerCase())
+    )
 })
+
+function agregarAlCarrito(servicio) {
+    carritoStore.agregarAlCarrito(servicio);
+}
 </script>
 
 <template>
-    <div class="home-container">
-    <Buscador v-if="usuarioActual" v-model:searchQuery="busqueda"/>
+  <div class="home-container">
+      <Buscador v-if="usuarioActual" v-model:searchQuery="busqueda"/>
   
-    <section class="services">
-        <div v-if="filteredServices.length === 0" class="no-results">
-            <p>No se encontraron servicios.</p>
-        </div>
-        <div v-for="servicio in filteredServices" :key="servicio.id" class="service-card">
-            <h4>{{ servicio.nombre }}</h4>
-            <p>{{ servicio.descripcion }}</p>
-            <p>Precio: {{ servicio.precio }}</p>
-        </div>
-    </section>
+      <section class="services">
+          <div v-if="filteredServices.length === 0" class="no-results">
+              <p>No se encontraron servicios.</p>
+          </div>
+          <div v-for="servicio in filteredServices" :key="servicio.id" class="service-card">
+              <h4>{{ servicio.nombre }}</h4>
+              <p>{{ servicio.descripcion }}</p>
+              <p>Precio: {{ servicio.precio }}</p>
+              <button v-if="usuarioActual" @click="agregarAlCarrito(servicio)">Agregar al Carrito</button>
+          </div>
+      </section>
   </div>
 </template>
 
@@ -68,7 +75,7 @@ const filteredServices = computed(() => {
 }
 
 .service-card:hover {
-  transform: scale(1.05); /* Scale effect on hover */
+  transform: scale(1.05); 
 }
 
 .no-results {
