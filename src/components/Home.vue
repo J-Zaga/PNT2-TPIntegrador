@@ -163,27 +163,41 @@ const total = computed(() => carritoStore.calcularTotal())
   list-style-type: none;
   padding: 0;
   margin: 0;
-  width: 100%;
 }
 
 .carrito-content li {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  margin: 10px 0; 
 }
 
+.carrito-content li span {
+  flex-shrink: 0; 
+}
+
+
 .carrito-content button {
-  background-color: #e74c3c;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 5px 10px;
-  cursor: pointer;
+  width: 100px; 
+  height: 40px; 
+  margin-top: 10px; 
+  padding: 5px; 
+  background-color: #e74c3c; 
+  color: white; 
+  border: none; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
 }
 
 .carrito-content button:hover {
-  background-color: #c0392b;
+  background-color: #c0392b; 
 }
+
 
 </style>
