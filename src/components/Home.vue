@@ -1,9 +1,10 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useServiceStore } from '../stores/serviceStore'
-import { useUserStore } from "../stores/userStore"
+import { useUserStore } from '../stores/userStore'
 import { useCarritoStore } from '../stores/carritoStore'
 import Buscador from './Buscador.vue'
+import Header from './Header.vue'
 import Filtro from './Filtro.vue'
 
 const store = useServiceStore()
@@ -12,37 +13,50 @@ const carritoStore = useCarritoStore()
 
 const busqueda = ref('')
 const usuarioActual = computed(() => user.usuarioRegistrado)
-
 const categoriaFiltro = ref('')
 const precioMinFiltro = ref(0)
 const precioMaxFiltro = ref(Infinity)
 
+
 const filteredServices = computed(() => {
     return store.servicios.filter(servicio => {
-        const matchesBusqueda = servicio.nombre.toLowerCase().includes(busqueda.value.toLowerCase());
-        const matchesCategoria = !categoriaFiltro.value || servicio.categoria === categoriaFiltro.value;
-        const matchesPrecio = servicio.precio >= precioMinFiltro.value && servicio.precio <= precioMaxFiltro.value;
-
-        return matchesBusqueda && matchesCategoria && matchesPrecio;
+        const matchesBusqueda = servicio.nombre.toLowerCase().includes(busqueda.value.toLowerCase())
+        const matchesCategoria = !categoriaFiltro.value || servicio.categoria === categoriaFiltro.value
+        const matchesPrecio = servicio.precio >= precioMinFiltro.value && servicio.precio <= precioMaxFiltro.value
+        return matchesBusqueda && matchesCategoria && matchesPrecio
     });
 });
 
+
 function agregarAlCarrito(servicio) {
-    carritoStore.agregarAlCarrito(servicio);
+    carritoStore.agregarAlCarrito(servicio)
 }
 
+
 function actualizarFiltros(filtros) {
-    categoriaFiltro.value = filtros.categoria;
-    precioMinFiltro.value = filtros.precioMin;
-    precioMaxFiltro.value = filtros.precioMax;
+    categoriaFiltro.value = filtros.categoria
+    precioMinFiltro.value = filtros.precioMin
+    precioMaxFiltro.value = filtros.precioMax
 }
+
+
+const mostrarCarrito = ref(false)
+
+function toggleCarrito() {
+    mostrarCarrito.value = !mostrarCarrito.value
+}
+
+
+const carrito = computed(() => carritoStore.obtenerCarrito())
+const total = computed(() => carritoStore.calcularTotal())
 </script>
 
 <template>
-  <Filtro v-if="usuarioActual" @actualizar-filtros="actualizarFiltros" />
+  <Header @toggle-carrito="toggleCarrito" />
   <div class="home-container">
+      <Filtro v-if="usuarioActual" @actualizar-filtros="actualizarFiltros" />
       <Buscador v-if="usuarioActual" v-model:searchQuery="busqueda" />
-  
+
       <section class="services">
           <div v-if="filteredServices.length === 0" class="no-results">
               <p>No se encontraron servicios.</p>
@@ -54,8 +68,24 @@ function actualizarFiltros(filtros) {
               <button v-if="usuarioActual" @click="agregarAlCarrito(servicio)">Agregar al Carrito</button>
           </div>
       </section>
+
+      
+      <div v-if="mostrarCarrito" class="carrito-modal">
+        <div class="carrito-content">
+          <h2>Carrito de Compras</h2>
+          <ul>
+            <li v-for="item in carrito" :key="item.id">
+              {{ item.nombre }} - ${{ item.precio }} (Cantidad: {{ item.cantidad }})
+              <button @click="carritoStore.eliminarDelCarrito(item.id)">Eliminar</button>
+            </li>
+          </ul>
+          <p>Total: ${{ total }}</p>
+          <button @click="toggleCarrito">Cerrar</button>
+        </div>
+      </div>
   </div>
 </template>
+
 
 <style scoped>
 .home-container {
@@ -100,5 +130,28 @@ function actualizarFiltros(filtros) {
   font-size: 1.5rem;
   color: #666;
   margin-top: 20px;
+}
+
+
+.carrito-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.carrito-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
 }
 </style>

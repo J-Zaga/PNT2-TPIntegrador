@@ -1,24 +1,38 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 export const useCarritoStore = defineStore('carritoStore', () => {
-    const carrito = ref([]);
+    const carrito = ref([])
 
     function agregarAlCarrito(servicio) {
-        carrito.value.push(servicio);
+        const existingItem = carrito.value.find(item => item.id === servicio.id)
+        if (existingItem) {
+            existingItem.cantidad += 1
+        } else {
+            carrito.value.push({ ...servicio, cantidad: 1 })
+        }
     }
 
     function eliminarDelCarrito(id) {
-        carrito.value = carrito.value.filter(item => item.id !== id);
+        const index = carrito.value.findIndex(item => item.id === id)
+        if (index !== -1) {
+            if (carrito.value[index].cantidad > 1) {
+                carrito.value[index].cantidad -= 1
+            } else {
+                carrito.value.splice(index, 1)
+            }
+        }
     }
 
     function obtenerCarrito() {
-        return carrito.value;
+        return carrito.value
     }
 
     function calcularTotal() {
-        return carrito.value.reduce((total, item) => total + item.precio, 0);
+        return carrito.value.reduce((total, item) => total + item.precio * item.cantidad, 0)
     }
 
-    return { carrito, agregarAlCarrito, eliminarDelCarrito, obtenerCarrito, calcularTotal };
-});
+    const totalServicios = computed(() => carrito.value.length)
+
+    return { carrito, agregarAlCarrito, eliminarDelCarrito, obtenerCarrito, calcularTotal, totalServicios }
+})
