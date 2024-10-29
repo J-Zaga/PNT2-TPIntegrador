@@ -3,7 +3,8 @@ import { ref, computed } from 'vue'
 import { useServiceStore } from '../stores/serviceStore'
 import { useUserStore } from "../stores/userStore"
 import { useCarritoStore } from '../stores/carritoStore'
-import Buscador from './Buscador.vue';
+import Buscador from './Buscador.vue'
+import Filtro from './Filtro.vue'
 
 const store = useServiceStore()
 const user = useUserStore()
@@ -12,20 +13,35 @@ const carritoStore = useCarritoStore()
 const busqueda = ref('')
 const usuarioActual = computed(() => user.usuarioRegistrado)
 
+const categoriaFiltro = ref('')
+const precioMinFiltro = ref(0)
+const precioMaxFiltro = ref(Infinity)
+
 const filteredServices = computed(() => {
-    return store.servicios.filter(servicio => 
-        servicio.nombre.toLowerCase().includes(busqueda.value.toLowerCase())
-    )
-})
+    return store.servicios.filter(servicio => {
+        const matchesBusqueda = servicio.nombre.toLowerCase().includes(busqueda.value.toLowerCase());
+        const matchesCategoria = !categoriaFiltro.value || servicio.categoria === categoriaFiltro.value;
+        const matchesPrecio = servicio.precio >= precioMinFiltro.value && servicio.precio <= precioMaxFiltro.value;
+
+        return matchesBusqueda && matchesCategoria && matchesPrecio;
+    });
+});
 
 function agregarAlCarrito(servicio) {
     carritoStore.agregarAlCarrito(servicio);
 }
+
+function actualizarFiltros(filtros) {
+    categoriaFiltro.value = filtros.categoria;
+    precioMinFiltro.value = filtros.precioMin;
+    precioMaxFiltro.value = filtros.precioMax;
+}
 </script>
 
 <template>
+  <Filtro v-if="usuarioActual" @actualizar-filtros="actualizarFiltros" />
   <div class="home-container">
-      <Buscador v-if="usuarioActual" v-model:searchQuery="busqueda"/>
+      <Buscador v-if="usuarioActual" v-model:searchQuery="busqueda" />
   
       <section class="services">
           <div v-if="filteredServices.length === 0" class="no-results">
