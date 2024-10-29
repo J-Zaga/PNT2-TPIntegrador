@@ -1,22 +1,22 @@
 <script setup>
-import { computed } from "vue"
-import { useRoute } from "vue-router"
-import { useUserStore } from "../stores/userStore"
-import { useCarritoStore } from "../stores/carritoStore"
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+import { useUserStore } from "../stores/userStore";
+import { useCarritoStore } from "../stores/carritoStore";
 
-const route = useRoute()
-const user = useUserStore()
-const carritoStore = useCarritoStore()
+const route = useRoute();
+const user = useUserStore();
+const carritoStore = useCarritoStore();
 
-const usuarioActual = computed(() => user.usuarioRegistrado)
-const tipo = computed(() => (usuarioActual.value ? usuarioActual.value.tipo : null))
-const enLoginOSignin = computed(() => route.path === "/login" || route.path === "/signin")
+const usuarioActual = computed(() => user.usuarioRegistrado);
+const tipo = computed(() => (usuarioActual.value ? usuarioActual.value.tipo : null));
+const enLoginOSignin = computed(() => route.path === "/login" || route.path === "/signin");
 
-
-const totalServicios = computed(() => carritoStore.totalServicios)
+// Total de servicios en el carrito
+const totalServicios = computed(() => carritoStore.totalServicios);
 
 function logOut() {
-  user.usuarioRegistrado = null
+  user.usuarioRegistrado = null;
 }
 </script>
 
@@ -25,11 +25,18 @@ function logOut() {
     <router-link to="/" class="mascot-button">MascotApp</router-link>
     <nav>
       <ul class="nav-list">
-        <li class="nav-item"><router-link to="/dashboard" v-if="tipo === 'admin'">Dashboard</router-link></li>
-        <li class="nav-item"><router-link to="/formulario-servicio" v-if="tipo === 'prestador'">Publicar</router-link></li>
-        <li class="nav-item" v-if="!usuarioActual && !enLoginOSignin"><router-link to="/login">Iniciar Sesión</router-link></li>
-        <li class="nav-item" v-if="!usuarioActual && !enLoginOSignin"><router-link to="/signin">Registrarse</router-link></li>
-        
+        <li class="nav-item">
+          <router-link to="/dashboard" v-if="tipo === 'admin'">Dashboard</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/formulario-servicio" v-if="tipo === 'prestador'">Publicar</router-link>
+        </li>
+        <li class="nav-item" v-if="!usuarioActual && !enLoginOSignin">
+          <router-link to="/login">Iniciar Sesión</router-link>
+        </li>
+        <li class="nav-item" v-if="!usuarioActual && !enLoginOSignin">
+          <router-link to="/signin">Registrarse</router-link>
+        </li>
         
         <li class="nav-item" v-if="tipo === 'usuario'">
           <button @click="$emit('toggle-carrito')" class="carrito-icon">
@@ -38,12 +45,13 @@ function logOut() {
           </button>
         </li>
 
-        <li class="nav-item" v-if="usuarioActual"><router-link to="/" @click="logOut">Cerrar Sesión</router-link></li>
+        <li class="nav-item" v-if="usuarioActual">
+          <router-link to="/" @click="logOut">Cerrar Sesión</router-link>
+        </li>
       </ul>
     </nav>
   </header>
 </template>
-
 
 <style scoped>
 .header {
