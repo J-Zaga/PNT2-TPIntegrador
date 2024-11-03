@@ -4,7 +4,7 @@ export default {
     "./src/**/*.{vue,js,ts,jsx,tsx}",
     "./node_modules/vue-tailwind-datepicker/**/*.js",
   ],
-  theme: {
+    theme: {
     extend: {backgroundImage: {
       "app": "url('/img/Log-in.jpg')"
     }},

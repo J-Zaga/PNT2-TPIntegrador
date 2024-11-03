@@ -2,11 +2,13 @@
     import { formatCurrency } from '@/helpers';
     import SelectedService from '../../components/SelectedService.vue'
     import { useAppointmentsStore } from '../../stores/appointments'
+    
 
     const appointments = useAppointmentsStore()
 </script>
 
 <template>
+    <Buscador/>
     <h2 class="text-4xl font-extrabold text-gray-700">Detalles cita y resumen</h2>
     <p class="text-gray-700 text-lg mt-5">A continuación verifica la información y confirma tu cita</p>
 
