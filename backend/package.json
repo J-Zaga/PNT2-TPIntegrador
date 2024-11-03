@@ -1,0 +1,21 @@
+{
+  "name": "mascotapp",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Backend para MascotApp en MEVN",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "seed:import": "node data/seed.js --import",
+    "seed:destroy": "node data/seed.js --destroy"
+  },
+  "author": "Grupo 4 PNT2",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "mongoose": "^8.8.0"
+  }
+}

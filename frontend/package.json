@@ -1,7 +1,7 @@
 {
-  "name": "tp2integrador",
-  "private": true,
+  "name": "frontend",
   "version": "0.0.0",
+  "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,18 +9,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^6.6.0",
     "axios": "^1.7.7",
-    "colors": "^1.4.0",
     "pinia": "^2.2.4",
-    "vue": "^3.4.37",
-    "vue-router": "^4.4.5"
+    "vue": "^3.5.12",
+    "vue-router": "^4.4.5",
+    "vue-tailwind-datepicker": "^1.7.3"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.1.2",
+    "@vitejs/plugin-vue": "^5.1.4",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14",
-    "vite": "^5.4.1"
+    "vite": "^5.4.10"
   }
 }
