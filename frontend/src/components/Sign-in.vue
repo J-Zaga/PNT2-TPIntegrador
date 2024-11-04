@@ -24,7 +24,7 @@ async function SignIn() {
           serviciosComprados: []
         })
         alert('Cuenta creada')
-        router.push('/login')
+        window.location.href = '/login'
       } else {
         errorMessage.value = "El nombre de usuario y la contraseña deben tener más de 4 caracteres"
       }

@@ -16,8 +16,8 @@ const filteredServices = computed(() => {
     const matchesPrice = service.precio >= selectedFilters.value.precioMin && service.precio <= selectedFilters.value.precioMax;
     
     return matchesSearch && matchesCategory && matchesPrice;
-  });
-});
+  })
+})
 
 function updateSearch(query) {
   searchQuery.value = query;
@@ -30,7 +30,7 @@ function updateFilters(filters) {
 
 <template>
   <div class="flex">
-    <div class="w-1/4 p-5 bg-transparent h-auto overflow-hidden mt-0"> <!-- Aumenté el margen a mt-20 -->
+    <div class="w-1/4 p-5 bg-transparent h-auto overflow-hidden mt-0"> 
       <Filtro @actualizar-filtros="updateFilters" />
     </div>
 

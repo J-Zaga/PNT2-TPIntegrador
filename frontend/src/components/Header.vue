@@ -10,7 +10,6 @@ const usuarioActual = computed(() => user.usuarioRegistrado)
 const tipo = computed(() => (usuarioActual.value ? usuarioActual.value.rol : null))
 const enLoginOSignin = computed(() => route.path === "/login" || route.path === "/signin")
 
-
 function logOut() {
   user.usuarioRegistrado = null
 }
