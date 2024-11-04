@@ -7,10 +7,9 @@ const route = useRoute()
 const user = useUserStore()
 
 const usuarioActual = computed(() => user.usuarioRegistrado)
-const tipo = computed(() => (usuarioActual.value ? usuarioActual.value.tipo : null))
+const tipo = computed(() => (usuarioActual.value ? usuarioActual.value.rol : null))
 const enLoginOSignin = computed(() => route.path === "/login" || route.path === "/signin")
 
-const totalServicios = computed(() => carritoStore.totalServicios)
 
 function logOut() {
   user.usuarioRegistrado = null
@@ -33,7 +32,7 @@ function logOut() {
         <li v-if="usuarioActual">
           <RouterLink>Mis citas</RouterLink>
         </li>
-        <li v-if="usuarioActual">
+        <li v-if="usuarioActual && tipo === 'usuario'">
           <RouterLink :to="{ name: 'new-appointment' }" class="text-gray-700 font-semibold">Nueva cita</RouterLink>
         </li>
         

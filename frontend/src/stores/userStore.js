@@ -1,34 +1,34 @@
-import { defineStore } from "pinia"
-import { computed, ref } from "vue"
+import { ref, onMounted } from 'vue'
+import { defineStore } from 'pinia'
+import UsersAPI from '../api/UsersAPI' 
 
-export const useUserStore = defineStore("userStore", () => {
-  const usuarios = ref([
-    {
-      id: 1,
-      usuario: "hola",
-      password: "123",
-      tipo: "usuario",
-    },
-    {
-      id: 2,
-      usuario: "adios",
-      password: "asd",
-      tipo: "prestador",
-    },
-    {
-      id: 3,
-      usuario: "juan",
-      password: "1234",
-      tipo: "admin",
-    },
-  ])
+export const useUserStore = defineStore('users', () => {
+    const users = ref([])
 
-  const userSize = computed(() => usuarios.value.length)
-  function addUser(nuevoUsuario) {
-    const id = usuarios.value.length + 1; 
-    usuarios.value.push({ id, ...nuevoUsuario });
-  }
-  const usuarioRegistrado = ref(null)
+    const fetchUsers = async () => {
+        try {
+            const { data } = await UsersAPI.all() 
+            users.value = data
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
-  return { userSize, addUser, usuarios, usuarioRegistrado }
+    onMounted(fetchUsers)
+
+    const addUser = async (user) => {
+        try {
+            const response = await UsersAPI.add(user) 
+            users.value.push(response.data) 
+        } catch (error) {
+            console.error('Error al agregar usuario:', error)
+            throw new Error('No se pudo crear el usuario')
+        }
+    }
+
+    return {
+        users,
+        addUser,
+        fetchUsers
+    }
 })

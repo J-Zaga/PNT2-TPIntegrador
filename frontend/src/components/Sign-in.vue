@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useUserStore } from '../stores/userStore'
 import { useRouter } from 'vue-router'
+
 const router = useRouter()
 const store = useUserStore()
 
@@ -12,18 +13,20 @@ const prestador = ref(false)
 
 async function SignIn() {
   try {
-    let usuarioEncontrado = store.usuarios.find(user => user.usuario === username.value)
+    let usuarioEncontrado = store.users.find(user => user.usuario === username.value)
+    
     if (!usuarioEncontrado) {
       if (username.value.length > 4 && password.value.length > 4) {
         store.addUser({
           usuario: username.value,
-          password: password.value,
-          tipo: prestador.value ? 'prestador' : 'usuario',
+          contraseña: password.value,
+          rol: prestador.value ? 'prestador' : 'usuario',
+          serviciosComprados: []
         })
         alert('Cuenta creada')
         router.push('/login')
       } else {
-        errorMessage.value = "El nombre de usuario y la contraseña deben tener mas de 4 caracteres"
+        errorMessage.value = "El nombre de usuario y la contraseña deben tener más de 4 caracteres"
       }
     } else {
       errorMessage.value = "Esa cuenta ya existe"
@@ -37,106 +40,52 @@ async function SignIn() {
 function GoToLogin() {
   router.push('/login')
 }
-
 </script>
 
 <template>
-  <div class="form-container">
-    <h2>Crear Cuenta</h2>
-    <form @submit.prevent="SignIn">
-      <input v-model="username" type="text" id="username" placeholder="Nombre usuario" required />
-      <input v-model="password" type="password" id="password" placeholder="Contraseña" required />
-      Prestador<input type="checkbox" v-model="prestador" />
-      <button type="submit">Crear</button>
+  <div class="w-full max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg">
+    <h2 class="text-2xl font-bold text-gray-700 mb-4 text-center">Crear Cuenta</h2>
+    <form @submit.prevent="SignIn" class="flex flex-col gap-4">
+      <input
+        v-model="username"
+        type="text"
+        id="username"
+        placeholder="Nombre de usuario"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-600 transition duration-200"
+        required
+      />
+      <input
+        v-model="password"
+        type="password"
+        id="password"
+        placeholder="Contraseña"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-600 transition duration-200"
+        required
+      />
+      <div class="flex items-center justify-center">
+        <input
+          type="checkbox"
+          v-model="prestador"
+          class="mr-2"
+        />
+        <label class="text-gray-700">Prestador</label>
+      </div>
+      <button
+        type="submit"
+        class="w-full bg-purple-700 text-white font-semibold p-3 rounded-lg hover:bg-purple-600 transition-colors duration-200"
+      >
+        Crear
+      </button>
     </form>
-    <p v-if="errorMessage">{{ errorMessage }}</p>
+    <p v-if="errorMessage" class="text-red-500 text-sm text-center mt-2">{{ errorMessage }}</p>
 
-    <div class="links">
-      <button class="text-button" @click="GoToLogin">Log-In</button>
+    <div class="flex justify-center mt-4">
+      <button
+        class="text-purple-700 underline hover:text-purple-600 transition-colors duration-200"
+        @click="GoToLogin"
+      >
+        Iniciar Sesión
+      </button>
     </div>
   </div>
 </template>
-
-<style scoped>
-.form-container {
-  width: 360px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-h2 {
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-label {
-  font-size: 14px;
-  color: #555;
-  display: block;
-  margin-bottom: 8px;
-  text-align: left;
-}
-
-input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
-  box-sizing: border-box;
-}
-
-input:focus {
-  border-color: #9a67e2;
-  outline: none;
-}
-
-button[type="submit"] {
-  width: 100%;
-  background-color: #9a67e2;
-  color: white;
-  padding: 12px;
-  font-size: 16px;
-  border: none;
-  border-radius: 24px;
-  cursor: pointer;
-}
-
-button[type="submit"]:hover {
-  background-color: #9a67e2;
-}
-
-.links {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-.text-button {
-  background: none;
-  border: none;
-  color: #9a67e2;
-  text-decoration: underline;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.text-button:hover {
-  color: #9a67e2;
-}
-
-.text-button:focus {
-  outline: none;
-}
-
-span {
-  display: inline-block;
-}
-</style>

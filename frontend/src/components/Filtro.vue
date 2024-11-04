@@ -19,6 +19,11 @@ const setPriceRange = (min, max) => {
     precioMax.value = max
     emitirFiltros() 
 }
+
+const borrarFiltros = () => {
+    categoria.value = ""
+    setPriceRange(0, Infinity)
+}
 </script>
 
 <template>
@@ -70,7 +75,7 @@ const setPriceRange = (min, max) => {
                 />
             </div>
 
-            <div class="price-option cursor-pointer text-red-600 hover:underline mt-2" @click="setPriceRange(0, Infinity)">
+            <div class="price-option cursor-pointer text-red-600 hover:underline mt-2" @click="borrarFiltros" >
                 Borrar Filtro
             </div>
         </div>
