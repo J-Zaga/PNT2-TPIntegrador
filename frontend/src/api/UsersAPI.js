@@ -1,4 +1,4 @@
-import api from "../lib/axios"
+import api from "../lib/axios";
 
 export default {
     all() {
@@ -6,5 +6,8 @@ export default {
     },
     add(user) {
         return api.post('/usuarios', user)
+    },
+    update(id, user) {
+        return api.put(`/usuarios/${id}`, user)
     }
 }

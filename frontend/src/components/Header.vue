@@ -29,8 +29,8 @@ function logOut() {
         <li v-if="tipo === 'prestador'" class="text-gray-700 font-semibold">
           <router-link to="/formulario-servicio" class="hover:text-gray-900">Publicar</router-link>
         </li>
-        <li v-if="usuarioActual">
-          <RouterLink>Mis citas</RouterLink>
+        <li v-if="usuarioActual && tipo === 'usuario'">
+          <RouterLink class="text-gray-700 font-semibold">Mis citas</RouterLink>
         </li>
         <li v-if="usuarioActual && tipo === 'usuario'">
           <RouterLink :to="{ name: 'new-appointment' }" class="text-gray-700 font-semibold">Nueva cita</RouterLink>

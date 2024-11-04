@@ -35,10 +35,9 @@ function updateFilters(filters) {
     </div>
 
     <div class="flex-1 p-5 border-0">
-      <h2 class="text-4xl font-extrabold text-gray-700 mt-0">Servicios</h2>
-      <p class="text-gray-700 text-lg mt-5">A continuación elige al menos un servicio para tu cita</p>
-
-      <Buscador @update:searchQuery="updateSearch" />
+   <h2 class="text-4xl font-extrabold text-gray-700 mt-0 mb-5">Servicios</h2>
+   <Buscador @update:searchQuery="updateSearch" />
+   <p class="text-gray-700 text-lg mt-5">A continuación elige al menos un servicio para tu cita</p>
 
       <div class="grid grid-cols-2 gap-5 mt-5">
         <ServiceItem 

@@ -40,6 +40,7 @@ async function SignIn() {
 function GoToLogin() {
   router.push('/login')
 }
+
 </script>
 
 <template>
