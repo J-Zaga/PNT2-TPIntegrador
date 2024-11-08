@@ -4,6 +4,7 @@ import UsersAPI from '../api/UsersAPI'
 
 export const useUserStore = defineStore('users', () => {
     const users = ref([])
+    const usuarioRegistrado = ref(null) 
 
     const fetchUsers = async () => {
         try {
@@ -14,12 +15,16 @@ export const useUserStore = defineStore('users', () => {
         }
     }
 
+    const setUsuarioRegistrado = (user) => {
+        usuarioRegistrado.value = user  
+    }
+
     onMounted(fetchUsers)
 
     const addUser = async (user) => {
         try {
             const response = await UsersAPI.add(user) 
-            users.value.push(response.data) 
+            users.value.push(response.data)
         } catch (error) {
             console.error('Error al agregar usuario:', error)
             throw new Error('No se pudo crear el usuario')
@@ -28,6 +33,8 @@ export const useUserStore = defineStore('users', () => {
 
     return {
         users,
+        usuarioRegistrado, 
+        setUsuarioRegistrado,
         addUser,
         fetchUsers
     }

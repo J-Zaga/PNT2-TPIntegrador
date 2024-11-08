@@ -1,19 +1,22 @@
-<!-- src/components/Header.vue -->
 <script setup>
 import { computed } from "vue"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { useUserStore } from "../stores/userStore"
 
 const route = useRoute()
+const router = useRouter()
 const user = useUserStore()
+
 
 const usuarioActual = computed(() => user.usuarioRegistrado)
 const tipo = computed(() => (usuarioActual.value ? usuarioActual.value.tipo : null))
 const enLoginOSignin = computed(() => route.path === "/login" || route.path === "/signin")
 
 function logOut() {
-  user.usuarioRegistrado = null
+  user.setUsuarioRegistrado(null) 
+  router.push("/login")
 }
+
 </script>
 
 <template>
@@ -31,7 +34,7 @@ function logOut() {
         </li>
 
         <li v-if="usuarioActual" class="text-gray-700 font-semibold">
-          <router-link to="/mis-citas" class="hover:text-gray-900">Mis citas</router-link>
+          <router-link to =/historial class="hover:text-gray-900">Mis citas</router-link>
         </li>
 
         <li v-if="usuarioActual" class="text-gray-700 font-semibold">

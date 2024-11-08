@@ -11,15 +11,20 @@ const usuarioActual = computed(() => user.usuarioRegistrado)
 const appointments = useAppointmentsStore()
 
 async function confirmPurchase() {
+    const fechaDeCompra = new Date().toISOString()
+
     appointments.services.forEach(service => {
         if (!usuarioActual.value.serviciosComprados.some(s => s._id === service._id)) {
+            service.fechaDeCompra = fechaDeCompra
             usuarioActual.value.serviciosComprados.push(service)
         }
     })
+
     try {
         await UsersAPI.update(usuarioActual.value._id, {
-            serviciosComprados: usuarioActual.value.serviciosComprados 
+            serviciosComprados: usuarioActual.value.serviciosComprados
         })
+        
         appointments.services = []  
         console.log('Compra confirmada en la base de datos:', usuarioActual.value.serviciosComprados)
         alert('¡Compra confirmada con éxito!')
