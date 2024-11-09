@@ -4,6 +4,7 @@ import AppointmentsLayout from '@/views/appointments/AppointmentsLayout.vue'
 import Login from '@/components/Login.vue'
 import SignIn from '@/components/Sign-in.vue'
 import Historial from '@/components/Historial.vue'
+import PublicarServicio from '@/components/PublicarServicio.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,6 +28,11 @@ const router = createRouter({
     path: '/historial',
     name: 'Historial',
     component: Historial
+    },
+    {
+      path: '/publicar-servicio',
+      name: 'PublicarServicio',
+      component: PublicarServicio
     },
     {
       path: '/reservaciones',

@@ -7,7 +7,6 @@ const route = useRoute()
 const router = useRouter()
 const user = useUserStore()
 
-
 const usuarioActual = computed(() => user.usuarioRegistrado)
 const tipo = computed(() => (usuarioActual.value ? usuarioActual.value.rol : null))
 const enLoginOSignin = computed(() => route.path === "/login" || route.path === "/signin")
@@ -30,14 +29,14 @@ function logOut() {
         </li>
 
         <li v-if="tipo === 'prestador'" class="text-gray-700 font-semibold">
-          <router-link to="/formulario-servicio" class="hover:text-gray-900">Publicar</router-link>
+          <router-link to= '/publicar-servicio' class="hover:text-gray-900">Publicar</router-link>
         </li>
 
         <li v-if="usuarioActual && tipo === 'usuario'" class="text-gray-700 font-semibold">
           <router-link to =/historial class="hover:text-gray-900">Historial</router-link>
         </li>
 
-        <li v-if="usuarioActual" class="text-gray-700 font-semibold">
+        <li v-if="usuarioActual && tipo === 'usuario' " class="text-gray-700 font-semibold">
           <router-link :to="{ name: 'new-appointment' }" class="hover:text-gray-900">Nueva cita</router-link>
         </li>
 

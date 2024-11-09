@@ -1,10 +1,13 @@
 import api from "../lib/axios"
 
 export default {
-    all(){
+    all() {
         return api.get('/servicios')
     },
     update(id, serviceData) {
         return api.put(`/servicios/${id}`, serviceData)
+    },
+    post(serviceData) {
+        return api.post('/servicios', serviceData)
     }
 }
