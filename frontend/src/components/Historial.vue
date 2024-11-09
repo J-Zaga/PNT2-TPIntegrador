@@ -59,7 +59,7 @@ onMounted(fetchPurchasedServices)
           <h3 class="text-2xl font-bold text-gray-800 mb-4">Servicio: {{ servicio.nombre }}</h3>
           <p class="text-gray-600 mb-6">{{ servicio.descripcion }}</p>
           <div class="flex justify-between items-center">
-            <p class="text-xl font-semibold text-green-600">Precio: {{ servicio.precio | formatCurrency }}</p>
+            <p class="text-xl font-semibold text-green-600">Precio: ${{ servicio.precio | formatCurrency }}</p>
           </div>
 
           <p class="text-sm text-gray-600 mt-4">
