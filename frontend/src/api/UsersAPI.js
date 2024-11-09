@@ -9,5 +9,8 @@ export default {
     },
     update(id, user) {
         return api.put(`/usuarios/${id}`, user)
+    },
+    getById(id) {
+        return api.get(`/usuarios/${id}`)
     }
 }

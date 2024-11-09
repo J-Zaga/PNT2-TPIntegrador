@@ -16,9 +16,8 @@ export const useUserStore = defineStore('users', () => {
     }
 
     const setUsuarioRegistrado = (user) => {
-        usuarioRegistrado.value = user  
+        usuarioRegistrado.value = user
     }
-
     onMounted(fetchUsers)
 
     const addUser = async (user) => {

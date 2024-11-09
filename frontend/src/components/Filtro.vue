@@ -34,12 +34,12 @@ const borrarFiltros = () => {
             <label class="block text-gray-600 mb-1">Categoría:</label>
             <select v-model="categoria" @change="emitirFiltros" class="border rounded-lg p-2 w-full">
                 <option value="">Todas las categorías</option>
-                <option value="paseo">Paseo</option>
-                <option value="veterinario">Veterinario</option>
-                <option value="peluquero">Peluquero</option>
-                <option value="entrenamiento">Entrenamiento</option>
-                <option value="cuidado">Cuidado</option>
-                <option value="limpieza">Limpieza</option>
+                <option value="Paseo">Paseo</option>
+                <option value="Veterinario">Veterinario</option>
+                <option value="Peluquero">Peluquero</option>
+                <option value="Entrenamiento">Entrenamiento</option>
+                <option value="Cuidado">Cuidado</option>
+                <option value="Limpieza">Limpieza</option>
             </select>
         </div>
 

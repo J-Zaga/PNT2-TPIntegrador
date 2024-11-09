@@ -9,12 +9,12 @@ const user = useUserStore()
 
 
 const usuarioActual = computed(() => user.usuarioRegistrado)
-const tipo = computed(() => (usuarioActual.value ? usuarioActual.value.tipo : null))
+const tipo = computed(() => (usuarioActual.value ? usuarioActual.value.rol : null))
 const enLoginOSignin = computed(() => route.path === "/login" || route.path === "/signin")
 
 function logOut() {
   user.setUsuarioRegistrado(null) 
-  router.push("/login")
+  router.push("/")
 }
 
 </script>
@@ -25,7 +25,7 @@ function logOut() {
 
     <nav>
       <ul class="flex items-center space-x-4">
-        <li v-if="tipo === 'admin'" class="text-gray-700 font-semibold">
+        <li v-if="tipo === 'administrador'" class="text-gray-700 font-semibold">
           <router-link to="/dashboard" class="hover:text-gray-900">Dashboard</router-link>
         </li>
 
@@ -33,8 +33,8 @@ function logOut() {
           <router-link to="/formulario-servicio" class="hover:text-gray-900">Publicar</router-link>
         </li>
 
-        <li v-if="usuarioActual" class="text-gray-700 font-semibold">
-          <router-link to =/historial class="hover:text-gray-900">Mis citas</router-link>
+        <li v-if="usuarioActual && tipo === 'usuario'" class="text-gray-700 font-semibold">
+          <router-link to =/historial class="hover:text-gray-900">Historial</router-link>
         </li>
 
         <li v-if="usuarioActual" class="text-gray-700 font-semibold">

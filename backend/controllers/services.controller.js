@@ -47,27 +47,31 @@ const getServiceById = async (req, res) => {
 const updateService = async (req, res) => {
     const { id } = req.params
 
-    if(validateObjectId(id, res)) return
+    if (validateObjectId(id, res)) return;
 
     const service = await Services.findById(id)
 
-    if(!service){
+    if (!service) {
         return handleNotFoundError("El servicio no existe", res)
     }
 
+    
     service.nombre = req.body.nombre || service.nombre
-    service.categoria =  req.body.categoria || service.categoria
+    service.categoria = req.body.categoria || service.categoria
     service.precio = req.body.precio || service.precio
+    service.fechaDeCompra = req.body.fechaDeCompra || service.fechaDeCompra
 
-    try{
+    try {
         await service.save()
         res.json({
-            msg: "El servicio se actualizó correctamente"
-        })
-    }catch(error){
-        console.log(error)
+            msg: "El servicio se actualizó correctamente",
+            servicio: service
+        });
+    } catch (error) {
+        console.error('Error al actualizar el servicio:', error)
+        res.status(500).json({ msg: 'Error al actualizar el servicio' })
     }
-}
+};
 
 const deleteService = async (req, res) => {
     const { id } = req.params

@@ -5,32 +5,38 @@ import SelectedService from '../../components/SelectedService.vue'
 import { useAppointmentsStore } from '../../stores/appointments'
 import { useUserStore } from "@/stores/userStore"
 import UsersAPI from "@/api/UsersAPI"
+import ServicesAPI from "@/api/ServicesAPI"  // Importar la API para servicios
 
 const user = useUserStore()
 const usuarioActual = computed(() => user.usuarioRegistrado)
 const appointments = useAppointmentsStore()
 
 async function confirmPurchase() {
-    const fechaDeCompra = new Date().toISOString()
+    const fechaDeCompra = new Date().toISOString();  // La fecha de compra en formato ISO
 
     appointments.services.forEach(service => {
         if (!usuarioActual.value.serviciosComprados.some(s => s._id === service._id)) {
-            service.fechaDeCompra = fechaDeCompra
-            usuarioActual.value.serviciosComprados.push(service)
+            service.fechaDeCompra = fechaDeCompra;  // Asignar la fecha de compra al servicio
+            usuarioActual.value.serviciosComprados.push(service);  // Añadir el servicio a la lista de servicios comprados
         }
-    })
+    });
 
     try {
+        // Actualizar cada servicio en la base de datos de servicios con la fecha de compra
+        await Promise.all(appointments.services.map(service => {
+            return ServicesAPI.update(service._id, { fechaDeCompra });
+        }));
+
+        // Luego actualizar al usuario con los servicios comprados
         await UsersAPI.update(usuarioActual.value._id, {
             serviciosComprados: usuarioActual.value.serviciosComprados
-        })
-        
-        appointments.services = []  
-        console.log('Compra confirmada en la base de datos:', usuarioActual.value.serviciosComprados)
-        alert('¡Compra confirmada con éxito!')
+        });
+
+        appointments.services = [];  // Limpiar los servicios después de la compra
+        alert('¡Compra confirmada con éxito!');
     } catch (error) {
-        console.error('Error al actualizar en la base de datos:', error)
-        alert('Hubo un problema al confirmar la compra.')
+        console.error('Error al actualizar en la base de datos:', error);
+        alert('Hubo un problema al confirmar la compra.');
     }
 }
 </script>

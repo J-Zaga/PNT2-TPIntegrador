@@ -15,6 +15,11 @@ const servicesSchema = mongoose.Schema({
         type: Number,
         required: true,
         trim: true
+    },
+    fechaDeCompra:{
+    type: Date,
+    required: false,
+    default:null
     }
 })
 

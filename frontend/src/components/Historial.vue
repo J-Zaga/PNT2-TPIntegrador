@@ -38,9 +38,14 @@ async function fetchPurchasedServices() {
 onMounted(fetchPurchasedServices)
 </script>
 <template>
-    <div class="container mx-auto px-4 py-6">
+  <div class="flex">
+    <div class="w-1/3">
+      <img src="/Historial.jpg" alt="Imagen historial" class="w-full h-auto object-cover" />
+    </div>
+
+    <div class="container mx-auto px-4 py-6 w-2/3">
       <h2 class="text-4xl font-extrabold text-gray-800 mb-8 text-center">Historial de Compras</h2>
-  
+
       <div v-if="serviciosComprados.length === 0" class="text-center text-lg text-gray-500 mb-8">
         <p>No tienes servicios comprados.</p>
       </div>
@@ -56,11 +61,18 @@ onMounted(fetchPurchasedServices)
           <div class="flex justify-between items-center">
             <p class="text-xl font-semibold text-green-600">Precio: {{ servicio.precio | formatCurrency }}</p>
           </div>
-  
+
           <p class="text-sm text-gray-600 mt-4">
             <span class="font-medium text-gray-800">Fecha de compra:</span> {{ formatDateTime(servicio.fechaDeCompra) }}
           </p>
         </div>
       </div>
     </div>
-  </template>
+  </div>
+</template>
+
+<style scoped>
+img {
+  object-fit: cover;
+}
+</style>

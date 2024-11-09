@@ -1,33 +1,33 @@
 <script setup>
 import { ref } from 'vue'
-import { useUserStore } from '../stores/userStore'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/userStore'
+import UsersAPI from '@/api/UsersAPI'
 
 const router = useRouter()
-const store = useUserStore()
-
 const username = ref('')
 const password = ref('')
 const errorMessage = ref('')
+const store = useUserStore()
 
 async function Login() {
   try {
     let usuarioEncontrado = store.users.find(user => user.usuario === username.value)
     if (usuarioEncontrado && usuarioEncontrado.contraseña === password.value) {
-      store.usuarioRegistrado = usuarioEncontrado
+      const { data } = await UsersAPI.getById(usuarioEncontrado._id) 
+
+      store.usuarioRegistrado = data
+
       alert('Login exitoso')
+      console.log(store.usuarioRegistrado)
       router.push('/reservaciones/nueva')
     } else {
       errorMessage.value = "Usuario o contraseña incorrectos"
     }
   } catch (error) {
-    console.error('Error durante el login:', error)
+    console.error('Error al obtener el usuario desde la base de datos:', error)
     errorMessage.value = 'Ocurrió un error inesperado'
   }
-}
-
-function GoToSignIn() {
-  router.push('/signin')
 }
 </script>
 
