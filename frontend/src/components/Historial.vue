@@ -57,7 +57,6 @@ onMounted(fetchPurchasedServices)
           class="bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300"
         >
           <h3 class="text-2xl font-bold text-gray-800 mb-4">Servicio: {{ servicio.nombre }}</h3>
-          <p class="text-gray-600 mb-6">{{ servicio.descripcion }}</p>
           <div class="flex justify-between items-center">
             <p class="text-xl font-semibold text-green-600">Precio: ${{ servicio.precio | formatCurrency }}</p>
           </div>

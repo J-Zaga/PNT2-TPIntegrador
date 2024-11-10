@@ -19,8 +19,13 @@ async function Login() {
       store.usuarioRegistrado = data
 
       alert('Login exitoso')
+      console.log('Tipo de usuario:', store.usuarioRegistrado.tipo)
       console.log(store.usuarioRegistrado)
+      if(store.usuarioRegistrado.rol == 'usuario'){
       router.push('/reservaciones/nueva')
+      }else {
+        router.push('/')
+      }
     } else {
       errorMessage.value = "Usuario o contraseña incorrectos"
     }
@@ -28,6 +33,9 @@ async function Login() {
     console.error('Error al obtener el usuario desde la base de datos:', error)
     errorMessage.value = 'Ocurrió un error inesperado'
   }
+}
+function GoToSignIn(){
+  router.push('/signin')
 }
 </script>
 
