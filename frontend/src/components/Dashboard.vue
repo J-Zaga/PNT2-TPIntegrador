@@ -1,3 +1,150 @@
+<script>
+import { computed, ref, watch } from 'vue'
+import BarChart from './BarChart.vue'
+import PieChart from './PieChart.vue'
+import { useUserStore } from "../stores/userStore"
+import { useServiceStore } from '@/stores/services'
+
+export default {
+  name: 'Dashboard',
+  components: {
+    BarChart,
+    PieChart
+  },
+
+  setup() {
+    // Acceso a los stores
+    const store = useUserStore()
+    const serviceStore = useServiceStore()
+
+    // Cálculo dinámico de usuarios por rol
+    const quantityDataUsers = computed(() => {
+      const usuarios = store.users.filter(user => user.rol === "usuario").length
+      const prestadores = store.users.filter(user => user.rol === "prestador").length
+      const administradores = store.users.filter(user => user.rol === "administrador").length
+      return [usuarios, prestadores, administradores]
+    })
+
+    // Etiquetas para el gráfico de tortas
+    const usersLabels = ref(['Clientes', 'Prestadores', 'Administradores'])
+
+    // Total de usuarios
+    const totalUsers = computed(() => {
+      return store.users.length // Devuelve el total de usuarios
+    })
+
+    // Cálculo dinámico de servicios por categoría
+    const servicesLabels = ref(['Veterinario', 'Paseo', 'Peluquero', 'Entrenamiento', 'Cuidado', 'Limpieza'])
+
+    const quantityDataServices = computed(() => {
+      const categoryCounts = {
+        Veterinario: 0,
+        Paseo: 0,
+        Peluquero: 0,
+        Entrenamiento: 0,
+        Cuidado: 0,
+        Limpieza: 0
+      }
+
+      serviceStore.services.forEach(service => {
+        if (categoryCounts[service.categoria] !== undefined) {
+          categoryCounts[service.categoria]++
+        }
+      })
+
+      return servicesLabels.value.map(label => categoryCounts[label] || 0)
+    })
+
+    // Total de servicios
+    const totalServices = computed(() => {
+      return serviceStore.services.length // Devuelve el total de servicios
+    })
+
+    // Calcular la categoría más publicada
+    const maxCategory = computed(() => {
+      const categoryCounts = {
+        Veterinario: 0,
+        Paseo: 0,
+        Peluquero: 0,
+        Entrenamiento: 0,
+        Cuidado: 0,
+        Limpieza: 0
+      }
+
+      serviceStore.services.forEach(service => {
+        if (categoryCounts[service.categoria] !== undefined) {
+          categoryCounts[service.categoria]++
+        }
+      })
+
+      const maxCategory = Object.keys(categoryCounts).reduce((a, b) => 
+        categoryCounts[a] > categoryCounts[b] ? a : b
+      )
+
+      return maxCategory
+    })
+
+    // Calcular la categoría más comprada (solo los servicios con fechaDeCompra no null)
+    const mostPurchasedCategory = computed(() => {
+      const categoryCounts = {
+        Veterinario: 0,
+        Paseo: 0,
+        Peluquero: 0,
+        Entrenamiento: 0,
+        Cuidado: 0,
+        Limpieza: 0
+      }
+
+      // Filtrar servicios que tienen fechaDeCompra no null
+      const purchasedServices = serviceStore.services.filter(service => service.fechaDeCompra !== null);
+
+      purchasedServices.forEach(service => {
+        if (categoryCounts[service.categoria] !== undefined) {
+          categoryCounts[service.categoria]++
+        }
+      })
+
+      // Encontrar la categoría con el máximo número de compras
+      const maxCategory = Object.keys(categoryCounts).reduce((a, b) => 
+        categoryCounts[a] > categoryCounts[b] ? a : b
+      )
+
+      return maxCategory
+    })
+
+    // Crear las versiones ordenadas de los datos y etiquetas para el gráfico de barras
+    const sortedEarningsData = ref([])
+    const sortedEarningsLabels = ref([])
+
+    const sortServicesData = () => {
+      // Combinar los datos con las etiquetas para ordenarlos correctamente
+      const sortedData = quantityDataServices.value
+        .map((value, index) => ({ value, label: servicesLabels.value[index] }))
+        .sort((a, b) => a.value - b.value) // Ordenar de menor a mayor
+
+      sortedEarningsData.value = sortedData.map(item => item.value)
+      sortedEarningsLabels.value = sortedData.map(item => item.label)
+    }
+
+    // Llamamos a la función para inicializar el orden al principio
+    watch(quantityDataServices, sortServicesData, { immediate: true })
+
+    return {
+      earningsData: quantityDataServices,
+      earningsLabels: servicesLabels,
+      sortedEarningsData,
+      sortedEarningsLabels,
+      salesData: quantityDataUsers,
+      salesLabels: usersLabels,
+      totalServices, 
+      totalUsers, 
+      maxCategory, 
+      mostPurchasedCategory
+    }
+  }
+}
+</script>
+
 <template>
     <div class="dashboard-container">
       <!-- Header con estadísticas principales -->
@@ -5,22 +152,22 @@
         <div class="stat-card">
           <div class="icon purple"><i class="fas fa-shopping-cart"></i></div>
           <p>Total servicios:</p>
-          <medium class="green">500</medium>
+          <medium class="green"> {{ totalServices }} </medium>
         </div>
         <div class="stat-card">
           <div class="icon green"><i class="fas fa-dollar-sign"></i></div>
           <p>Total Usuarios:</p>
-          <medium class="red">200</medium>
+          <medium class="red"> {{ totalUsers }} </medium>
         </div>
         <div class="stat-card">
           <div class="icon blue"><i class="fas fa-users"></i></div>
-          <p>Servicio mejor valorado ultimo mes:</p>
-          <medium class="green">Veterinario</medium>
+          <p>Categoria mas publicada:</p>
+          <medium class="green"> {{ maxCategory }} </medium>
         </div>
         <div class="stat-card">
           <div class="icon teal"><i class="fas fa-chart-line"></i></div>
-          <p>Servicio peor valorado ultimo mes:</p>
-          <medium class="green">Entrenamiento</medium>
+          <p>Categoria mas comprada:</p>
+          <medium class="green"> {{ mostPurchasedCategory }} </medium>
         </div>
       </div>
   
@@ -35,80 +182,9 @@
           <PieChart :data="salesData" :labels="salesLabels" />
         </div>
       </div>
-  
-      <!-- Sección de los divs de abajo de los graficos -->
-      <div class="orders-section">
-        <div class="order-card">
-          <p>Servicio con mayor popularidad historico:</p>
-          <medium>Paseador</medium>
-        </div>
-        <div class="order-card">
-          <p>Mejor prestador:</p>
-          <medium>Martin Gomez</medium>
-        </div>
-        <div class="order-card">
-          <p>Mejor cliente:</p>
-          <medium>Julieta Morgan</medium>
-        </div>
-        <div class="order-card">
-          <p>Servicio con menor popularidad historico:</p>
-          <medium>Limpieza</medium>
-        </div>
-      </div>
     </div>
   </template>
-  
-  <script>
-  import { ref, watch } from 'vue';
-  import BarChart from './BarChart.vue';
-  import PieChart from './PieChart.vue';
-  
-  export default {
-    name: 'Dashboard',
-    components: {
-      BarChart,
-      PieChart
-    },
-    setup() {
-      // Datos hardcodeados para los gráficos
-      const quantityDataServices = ref([5000, 4500, 10000, 8900, 2800, 500]);  // Datos para el gráfico de barras
-      const servicesLabels = ref(['Veterinario', 'Paseo', 'Peluquero', 'Entrenamiento', 'Cuidado', 'Limpieza']);  // Etiquetas para las barras
-  
-      const quantityDataUsers = ref([500, 180, 120]);  // Datos para el gráfico de pastel
-      const usersLabels = ref(['Clientes', 'Prestadores', 'Administradores']);  // Etiquetas para el pastel
-  
-      // Crear las versiones ordenadas de los datos y etiquetas para el gráfico de barras
-      const sortedEarningsData = ref([]);
-      const sortedEarningsLabels = ref([]);
-  
-      const sortServicesData = () => {
-        // Combinar los datos con las etiquetas para ordenarlos correctamente
-        const sortedData = quantityDataServices.value
-          .map((value, index) => ({ value, label: servicesLabels.value[index] }))
-          .sort((a, b) => a.value - b.value);  // Ordenar de menor a mayor
-  
-        sortedEarningsData.value = sortedData.map(item => item.value);
-        sortedEarningsLabels.value = sortedData.map(item => item.label);
-      };
-  
-      // Llamamos a la función para inicializar el orden al principio
-      sortServicesData();
-  
-      // Watch para detectar cambios en los datos de ganancias y reordenar
-      watch(quantityDataServices, sortServicesData);
-  
-      return {
-        earningsData: quantityDataServices,
-        earningsLabels: servicesLabels,
-        sortedEarningsData,
-        sortedEarningsLabels,
-        salesData: quantityDataUsers,
-        salesLabels: usersLabels
-      };
-    }
-  };
-  </script>
-  
+
   <style scoped>
   .dashboard-container {
     width: 100%;
