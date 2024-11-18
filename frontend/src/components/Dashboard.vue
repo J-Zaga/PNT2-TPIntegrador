@@ -77,11 +77,9 @@ export default {
         }
       })
 
-      const maxCategory = Object.keys(categoryCounts).reduce((a, b) => 
+      return Object.keys(categoryCounts).reduce((a, b) => 
         categoryCounts[a] > categoryCounts[b] ? a : b
       )
-
-      return maxCategory
     })
 
     // Calcular la categoría más comprada (solo los servicios con fechaDeCompra no null)
@@ -105,11 +103,35 @@ export default {
       })
 
       // Encontrar la categoría con el máximo número de compras
-      const maxCategory = Object.keys(categoryCounts).reduce((a, b) => 
+      return Object.keys(categoryCounts).reduce((a, b) => 
         categoryCounts[a] > categoryCounts[b] ? a : b
       )
+    })
 
-      return maxCategory
+    // Calcular la categoría menos comprada (solo los servicios con fechaDeCompra no null)
+    const leastPurchasedCategory = computed(() => {
+      const categoryCounts = {
+        Veterinario: 0,
+        Paseo: 0,
+        Peluquero: 0,
+        Entrenamiento: 0,
+        Cuidado: 0,
+        Limpieza: 0
+      }
+
+      // Filtrar servicios que tienen fechaDeCompra no null
+      const purchasedServices = serviceStore.services.filter(service => service.fechaDeCompra !== null);
+
+      purchasedServices.forEach(service => {
+        if (categoryCounts[service.categoria] !== undefined) {
+          categoryCounts[service.categoria]++
+        }
+      })
+
+      // Encontrar la categoría con el mínimo número de compras
+      return Object.keys(categoryCounts).reduce((a, b) => 
+        categoryCounts[a] < categoryCounts[b] ? a : b
+      )
     })
 
     // Crear las versiones ordenadas de los datos y etiquetas para el gráfico de barras
@@ -139,7 +161,8 @@ export default {
       totalServices, 
       totalUsers, 
       maxCategory, 
-      mostPurchasedCategory
+      mostPurchasedCategory,
+      leastPurchasedCategory // Nueva categoría menos comprada
     }
   }
 }
@@ -161,8 +184,8 @@ export default {
         </div>
         <div class="stat-card">
           <div class="icon blue"><i class="fas fa-users"></i></div>
-          <p>Categoria mas publicada:</p>
-          <medium class="green"> {{ maxCategory }} </medium>
+          <p>Categoria menos comprada:</p>
+          <medium class="green"> {{ leastPurchasedCategory }} </medium>
         </div>
         <div class="stat-card">
           <div class="icon teal"><i class="fas fa-chart-line"></i></div>

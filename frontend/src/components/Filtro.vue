@@ -17,10 +17,9 @@ const hayPrecio = ref(props.hayPrecio)
 
 watch(() => props.categoria, (newVal) => {
   categoria.value = newVal
-  // Reseteamos los filtros de precio cuando cambia la categoría
   precioMin.value = 0
   precioMax.value = Infinity
-  emitirFiltros()  // Emitimos los filtros actualizados
+  emitirFiltros()
 })
 
 watch(() => props.precioMin, (newVal) => {
