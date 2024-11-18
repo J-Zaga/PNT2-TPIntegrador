@@ -1,28 +1,58 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
+
+const props = defineProps({
+  categoria: String,
+  precioMin: Number,
+  precioMax: Number,
+  hayPrecio: Boolean
+})
 
 const emit = defineEmits(['actualizar-filtros'])
-const categoria = ref('')
-const precioMin = ref(0)
-const precioMax = ref(Infinity)
+
+const categoria = ref(props.categoria)
+const precioMin = ref(props.precioMin)
+const precioMax = ref(props.precioMax)
+const hayPrecio = ref(props.hayPrecio)
+
+watch(() => props.categoria, (newVal) => {
+  categoria.value = newVal
+  // Reseteamos los filtros de precio cuando cambia la categoría
+  precioMin.value = 0
+  precioMax.value = Infinity
+  emitirFiltros()  // Emitimos los filtros actualizados
+})
+
+watch(() => props.precioMin, (newVal) => {
+  precioMin.value = newVal
+})
+
+watch(() => props.precioMax, (newVal) => {
+  precioMax.value = newVal
+})
+
+watch(() => props.hayPrecio, (newVal) => {
+  hayPrecio.value = newVal
+})
 
 function emitirFiltros() {
-    emit('actualizar-filtros', {
-        categoria: categoria.value,
-        precioMin: precioMin.value,
-        precioMax: precioMax.value
-    })
+  emit('actualizar-filtros', {
+    categoria: categoria.value,
+    precioMin: precioMin.value,
+    precioMax: precioMax.value,
+    hayPrecio: hayPrecio.value
+  })
 }
 
 const setPriceRange = (min, max) => {
-    precioMin.value = min
-    precioMax.value = max
-    emitirFiltros() 
+  precioMin.value = min
+  precioMax.value = max
+  emitirFiltros() 
 }
 
 const borrarFiltros = () => {
-    categoria.value = ""
-    setPriceRange(0, Infinity)
+  categoria.value = ""
+  setPriceRange(0, Infinity)
 }
 </script>
 
@@ -45,13 +75,13 @@ const borrarFiltros = () => {
 
         <div class="field mb-4">
             <label class="block text-gray-600 mb-1">Precio:</label>
-            <div class="price-option cursor-pointer text-blue-600 hover:underline" @click="setPriceRange(0, 200)">
+            <div v-if="precioMin < 200" class="price-option cursor-pointer text-blue-600 hover:underline" @click="setPriceRange(0, 200)">
                 Hasta $ 200
             </div>
-            <div class="price-option cursor-pointer text-blue-600 hover:underline" @click="setPriceRange(200, 400)">
+            <div v-if="hayPrecio" class="price-option cursor-pointer text-blue-600 hover:underline" @click="setPriceRange(200, 400)">
                 $ 200 a $ 400
             </div>
-            <div class="price-option cursor-pointer text-blue-600 hover:underline" @click="setPriceRange(400, Infinity)">
+            <div v-if="precioMax > 400" class="price-option cursor-pointer text-blue-600 hover:underline" @click="setPriceRange(400, Infinity)">
                 Más de $ 400
             </div>
         
