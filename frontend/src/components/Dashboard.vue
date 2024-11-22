@@ -1,3 +1,45 @@
+<template>
+  <div class="dashboard-container">
+    <!-- Header con estadísticas principales -->
+    <div class="stats-header">
+      <div class="stat-card">
+        <div class="icon purple"><i class="fas fa-shopping-cart"></i></div>
+        <p>Total servicios:</p>
+        <medium class="green"> {{ totalServices }} </medium>
+      </div>
+      <div class="stat-card">
+        <div class="icon green"><i class="fas fa-dollar-sign"></i></div>
+        <p>Total Usuarios:</p>
+        <medium class="green"> {{ totalUsers }} </medium>
+      </div>
+      <div class="stat-card">
+        <div class="icon blue"><i class="fas fa-users"></i></div>
+        <p>Categoria menos comprada:</p>
+        <medium class="green"> {{ leastPurchasedCategory }} </medium>
+      </div>
+      <div class="stat-card">
+        <div class="icon teal"><i class="fas fa-chart-line"></i></div>
+        <p>Categoria mas comprada:</p>
+        <medium class="green"> {{ mostPurchasedCategory }} </medium>
+      </div>
+    </div>
+
+  
+
+    <!-- Sección de gráficos -->
+    <div class="charts-section">
+      <div class="chart-card">
+        <h3>Services Analytics</h3>
+        <BarChart :data="sortedEarningsData" :labels="sortedEarningsLabels" />
+      </div>
+      <div class="chart-card">
+        <h3>Users Analytics</h3>
+        <PieChart :data="salesData" :labels="salesLabels" />
+      </div>
+    </div>
+  </div>
+</template>
+
 <script>
 import { computed, ref, watch } from 'vue'
 import BarChart from './BarChart.vue'
@@ -7,7 +49,7 @@ import { useServiceStore } from '@/stores/services'
 
 export default {
   name: 'Dashboard',
-  components: {
+  components: { 
     BarChart,
     PieChart
   },
@@ -168,106 +210,75 @@ export default {
 }
 </script>
 
-<template>
-    <div class="dashboard-container">
-      <!-- Header con estadísticas principales -->
-      <div class="stats-header">
-        <div class="stat-card">
-          <div class="icon purple"><i class="fas fa-shopping-cart"></i></div>
-          <p>Total servicios:</p>
-          <medium class="green"> {{ totalServices }} </medium>
-        </div>
-        <div class="stat-card">
-          <div class="icon green"><i class="fas fa-dollar-sign"></i></div>
-          <p>Total Usuarios:</p>
-          <medium class="red"> {{ totalUsers }} </medium>
-        </div>
-        <div class="stat-card">
-          <div class="icon blue"><i class="fas fa-users"></i></div>
-          <p>Categoria menos comprada:</p>
-          <medium class="green"> {{ leastPurchasedCategory }} </medium>
-        </div>
-        <div class="stat-card">
-          <div class="icon teal"><i class="fas fa-chart-line"></i></div>
-          <p>Categoria mas comprada:</p>
-          <medium class="green"> {{ mostPurchasedCategory }} </medium>
-        </div>
-      </div>
-  
-      <!-- Sección de gráficos -->
-      <div class="charts-section">
-        <div class="chart-card">
-          <h3>Services Analytics</h3>
-          <BarChart :data="sortedEarningsData" :labels="sortedEarningsLabels" />
-        </div>
-        <div class="chart-card">
-          <h3>Users Analytics</h3>
-          <PieChart :data="salesData" :labels="salesLabels" />
-        </div>
-      </div>
-    </div>
-  </template>
+<style scoped>
+.dashboard-container {
+  width: 100%;
+  margin: auto;
+  padding: 30px;
+  background-color: #f8f9fa;
+}
 
-  <style scoped>
-  .dashboard-container {
-    width: 100%;
-    margin: auto;
-    padding: 30px;
-    background-color: #f8f9fa;
-  }
-  
-  /* Header de estadísticas */
-  .stats-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 30px;
-  }
-  
-  .stat-card {
-    background: white;
-    border-radius: 8px;
-    padding: 30px;
-    flex: 1;
-    margin: 0 15px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Sección de gráficos */
-  .charts-section {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 30px;
-  }
-  
-  .chart-card {
-    flex: 1;
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    margin: 0 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    height: 400px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  /* Sección de órdenes */
-  .orders-section {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-  }
-  
-  .order-card {
-    flex: 1;
-    background: white;
-    border-radius: 8px;
-    padding: 30px;
-    margin: 0 15px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  </style>
+/* Header de estadísticas */
+.stats-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 8px;
+  padding: 30px;
+  flex: 1;
+  margin: 0 15px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+
+.charts-section {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.chart-card {
+  flex: 1;
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 0 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.icon {
+  font-size: 24px;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+
+.green {
+  color: #28a745;
+}
+
+.red {
+  color: #dc3545;
+}
+
+.purple {
+  color: #6f42c1;
+}
+
+.teal {
+  color: #20c997;
+}
+
+.blue {
+  color: #007bff;
+}
+
+.medium {
+  font-weight: bold;
+}
+</style>
