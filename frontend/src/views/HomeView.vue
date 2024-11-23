@@ -1,15 +1,31 @@
+<script setup>
+import { ref, computed } from 'vue';
+import { useServiceStore } from '@/stores/services';
+
+// Estado para controlar la visibilidad del banner
+const isBannerVisible = ref(true);
+
+// Función para alternar la visibilidad del banner
+const toggleBanner = () => {
+  isBannerVisible.value = !isBannerVisible.value;
+};
+
+// Traer el store de servicios
+const serviceStore = useServiceStore();
+
+// Acceder a la categoría menos comprada desde el store
+const leastPurchasedCategory = computed(() => serviceStore.leastPurchasedCategory);
+
+</script>
 <template>
   <div class="home-container">
     <header class="header">
       <div class="logo">
-        <!-- Logo si tienes uno -->
       </div>
     </header>
 
-
     <!-- Sección principal con el carrusel -->
     <main class="main-content">
-      <!-- Contenido del carrusel -->
       <div class="carousel">
         <div class="carousel-images" :style="{ transform: `translateX(-${currentIndex * 100}%)` }">
           <div class="carousel-slide">
@@ -47,8 +63,9 @@
     </main> 
 
     <!-- Banner de la categoría menos comprada -->
-    <div v-if="leastPurchasedCategory" class="banner">
-      <h2>¡Aprovecha nuestras promociones en la categoria "<strong>{{ leastPurchasedCategory }}</strong>"!</h2>
+    <div v-if="isBannerVisible" class="banner">
+      <h2>¡10% de descuento pagando en efectivo en la categoria de <strong>{{ leastPurchasedCategory }}</strong>!</h2>
+      <button @click="toggleBanner" class="close-banner">✖</button> <!-- Botón para cerrar el banner -->
     </div>
 
     <!-- Sección de información (Valores, Misión, Objetivos) -->
@@ -69,49 +86,6 @@
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue';
-import { useServiceStore } from '@/stores/services';
-
-// Estado para el índice de la diapositiva del carrusel
-const currentIndex = ref(0);
-const totalSlides = 4;
-const showTop5 = ref(false); // Controlar la visibilidad de la barra de top 5
-
-// Traer el store de servicios
-const serviceStore = useServiceStore();
-
-// Acceder a la categoría menos comprada desde el store
-const leastPurchasedCategory = computed(() => serviceStore.leastPurchasedCategory);
-
-// Lista de los 5 servicios más vendidos (hardcodeados por ahora)
-const top5Services = ref([
-  { name: 'Paseo de perros', image: 'paseoperro.jpg' },
-  { name: 'Baño y peluquería', image: 'paseoperro.jpg' },
-  { name: 'Veterinaria a domicilio', image: 'paseoperro.jpg' },
-  { name: 'Entrenamiento básico', image: 'paseoperro.jpg' },
-  { name: 'Guardería de día', image: 'paseoperro.jpg' }
-]);
-
-// Funciones para el carrusel
-const nextSlide = () => {
-  currentIndex.value = (currentIndex.value + 1) % totalSlides;
-};
-
-const prevSlide = () => {
-  currentIndex.value = (currentIndex.value - 1 + totalSlides) % totalSlides;
-};
-
-let interval;
-onMounted(() => {
-  interval = setInterval(nextSlide, 4000); // Cambiar cada 4 segundos
-});
-
-onUnmounted(() => {
-  clearInterval(interval); // Limpiar intervalo cuando el componente se destruya
-});
-</script>
-
 <style scoped>
 .home-container {
   font-family: Arial, sans-serif;
@@ -127,61 +101,36 @@ onUnmounted(() => {
   padding: 20px 0;
 }
 
-/* Estilos del banner */
 .banner {
+  display: inline-block;
   background-color: #f8d7da;
-  padding: 20px;
-  margin-top: 30px;
+  background-image: url('/fondo.jpg');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  padding: 30px 20px;
+  margin: 30px auto;
   border-radius: 8px;
   text-align: center;
   font-size: 1.2rem;
-  color: #721c24;
   font-weight: bold;
+  color: white;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 80%;
 }
 
-/* Botón Top 5 */
-.top5-button-container {
-  display: flex;
-  justify-content: center;
-  position: relative;
-  margin-bottom: 20px;
-}
-
-.top5-button {
-  color: rgb(5, 5, 5);
-  border: none;
-  padding: 10px 20px;
-  font-size: 1.6rem;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.top5-services-bar {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
+.close-banner {
   position: absolute;
-  top: 50px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 80%;
-  z-index: 100;
-}
-
-.top5-service {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  width: 100px;
-  margin: 0 10px;
+  top: 0px; 
+  right: 0px; 
+  background-color: transparent;
+  border: 1px solid black; 
+  border-radius: 1px; 
+  padding: 2px; 
+  font-size: 1rem; 
+  color: black; 
+  cursor: pointer;
 }
 
 .service-image {
@@ -197,7 +146,6 @@ onUnmounted(() => {
   color: #333;
 }
 
-/* Estilos del carrusel */
 .main-content {
   position: relative; 
   color: white;
@@ -280,7 +228,6 @@ onUnmounted(() => {
   right: 10px;
 }
 
-/* Estilos de la sección de información */
 .info-section {
   display: flex;
   justify-content: space-around;
@@ -289,7 +236,6 @@ onUnmounted(() => {
   gap: 20px;
 }
 
-/* Estilo de cada tarjeta de información */
 .info-card {
   flex: 1 1 30%;
   max-width: 300px;
