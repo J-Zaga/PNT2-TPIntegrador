@@ -29,10 +29,12 @@ export const useUserStore = defineStore('users', () => {
             throw new Error('No se pudo crear el usuario')
         }
     }
+    const getUsers = () => users.value
+    const getUsuarioRegistrado = () => usuarioRegistrado.value
 
     return {
-        users,
-        usuarioRegistrado, 
+        getUsers,
+        getUsuarioRegistrado,
         setUsuarioRegistrado,
         addUser,
         fetchUsers

@@ -12,16 +12,16 @@ const store = useUserStore()
 
 async function Login() {
   try {
-    let usuarioEncontrado = store.users.find(user => user.usuario === username.value)
+    let usuarioEncontrado = store.getUsers().find(user => user.usuario === username.value)
     if (usuarioEncontrado && usuarioEncontrado.contraseña === password.value) {
       const { data } = await UsersAPI.getById(usuarioEncontrado._id) 
 
-      store.usuarioRegistrado = data
+      store.setUsuarioRegistrado(data)
 
       alert('Login exitoso')
-      console.log('Tipo de usuario:', store.usuarioRegistrado.tipo)
-      console.log(store.usuarioRegistrado)
-      if(store.usuarioRegistrado.rol == 'usuario'){
+      console.log('Tipo de usuario:', store.getUsuarioRegistrado().tipo)
+      console.log(store.getUsuarioRegistrado())
+      if(store.getUsuarioRegistrado().rol == 'usuario'){
       router.push('/reservaciones/nueva')
       }else {
         router.push('/')

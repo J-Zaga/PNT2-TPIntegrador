@@ -8,7 +8,7 @@ import UsersAPI from "@/api/UsersAPI"
 import ServicesAPI from "@/api/ServicesAPI"  // Importar la API para servicios
 
 const user = useUserStore()
-const usuarioActual = computed(() => user.usuarioRegistrado)
+const usuarioActual = computed(() => user.getUsuarioRegistrado())
 const appointments = useAppointmentsStore()
 
 async function confirmPurchase() {

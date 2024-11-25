@@ -13,7 +13,7 @@ const prestador = ref(false)
 
 async function SignIn() {
   try {
-    let usuarioEncontrado = store.users.find(user => user.usuario === username.value)
+    let usuarioEncontrado = store.getUsers().find(user => user.usuario === username.value)
     
     if (!usuarioEncontrado) {
       if (username.value.length > 4 && password.value.length > 4) {

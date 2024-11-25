@@ -23,10 +23,10 @@ async function fetchPurchasedServices() {
     try {
         const { data } = await ServicesAPI.all()
         serviciosComprados.value = data.filter(servicio => 
-            user.usuarioRegistrado.serviciosComprados.some(s => s._id === servicio._id)
+            user.getUsuarioRegistrado().serviciosComprados.some(s => s._id === servicio._id)
         )
         serviciosComprados.value = serviciosComprados.value.map(servicio => {
-            const servicioComprado = user.usuarioRegistrado.serviciosComprados.find(s => s._id === servicio._id)
+            const servicioComprado = user.getUsuarioRegistrado().serviciosComprados.find(s => s._id === servicio._id)
             servicio.fechaDeCompra = servicioComprado?.fechaDeCompra
             return servicio
         })

@@ -7,7 +7,7 @@ const route = useRoute()
 const router = useRouter()
 const user = useUserStore()
 
-const usuarioActual = computed(() => user.usuarioRegistrado)
+const usuarioActual = computed(() => user.getUsuarioRegistrado())
 const tipo = computed(() => (usuarioActual.value ? usuarioActual.value.rol : null))
 const enLoginOSignin = computed(() => route.path === "/login" || route.path === "/signin")
 

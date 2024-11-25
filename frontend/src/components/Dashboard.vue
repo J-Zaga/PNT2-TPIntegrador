@@ -61,9 +61,9 @@ export default {
 
     // Cálculo dinámico de usuarios por rol
     const quantityDataUsers = computed(() => {
-      const usuarios = store.users.filter(user => user.rol === "usuario").length
-      const prestadores = store.users.filter(user => user.rol === "prestador").length
-      const administradores = store.users.filter(user => user.rol === "administrador").length
+      const usuarios = store.getUsers().filter(user => user.rol === "usuario").length
+      const prestadores = store.getUsers().filter(user => user.rol === "prestador").length
+      const administradores = store.getUsers().filter(user => user.rol === "administrador").length
       return [usuarios, prestadores, administradores]
     })
 
@@ -72,7 +72,7 @@ export default {
 
     // Total de usuarios
     const totalUsers = computed(() => {
-      return store.users.length // Devuelve el total de usuarios
+      return store.getUsers().length // Devuelve el total de usuarios
     })
 
     // Cálculo dinámico de servicios por categoría
