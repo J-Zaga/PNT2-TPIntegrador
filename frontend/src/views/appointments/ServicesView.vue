@@ -10,7 +10,7 @@ const searchQuery = ref('')
 const selectedFilters = ref({ categoria: '', precioMin: 0, precioMax: Infinity })
 
 const filteredServices = computed(() => {
-  return store.services.filter(service => {
+  return store.getServices().filter(service => {
     const matchesSearch = service.nombre.toLowerCase().includes(searchQuery.value.toLowerCase())
     const matchesCategory = selectedFilters.value.categoria ? service.categoria === selectedFilters.value.categoria : true
     const matchesPrice = service.precio >= selectedFilters.value.precioMin && service.precio <= selectedFilters.value.precioMax

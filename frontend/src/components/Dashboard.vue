@@ -88,7 +88,7 @@ export default {
         Limpieza: 0
       }
 
-      serviceStore.services.forEach(service => {
+      serviceStore.getServices().forEach(service => {
         if (categoryCounts[service.categoria] !== undefined) {
           categoryCounts[service.categoria]++
         }
@@ -99,7 +99,7 @@ export default {
 
     // Total de servicios
     const totalServices = computed(() => {
-      return serviceStore.services.length // Devuelve el total de servicios
+      return serviceStore.getServices().length // Devuelve el total de servicios
     })
 
     // Calcular la categoría más publicada
@@ -113,7 +113,7 @@ export default {
         Limpieza: 0
       }
 
-      serviceStore.services.forEach(service => {
+      serviceStore.getServices().forEach(service => {
         if (categoryCounts[service.categoria] !== undefined) {
           categoryCounts[service.categoria]++
         }
@@ -136,7 +136,7 @@ export default {
       }
 
       // Filtrar servicios que tienen fechaDeCompra no null
-      const purchasedServices = serviceStore.services.filter(service => service.fechaDeCompra !== null);
+      const purchasedServices = serviceStore.getServices().filter(service => service.fechaDeCompra !== null);
 
       purchasedServices.forEach(service => {
         if (categoryCounts[service.categoria] !== undefined) {
@@ -162,7 +162,7 @@ export default {
       }
 
       // Filtrar servicios que tienen fechaDeCompra no null
-      const purchasedServices = serviceStore.services.filter(service => service.fechaDeCompra !== null);
+      const purchasedServices = serviceStore.getServices().filter(service => service.fechaDeCompra !== null);
 
       purchasedServices.forEach(service => {
         if (categoryCounts[service.categoria] !== undefined) {

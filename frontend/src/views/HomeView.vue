@@ -14,7 +14,7 @@ const toggleBanner = () => {
 const serviceStore = useServiceStore();
 
 // Acceder a la categoría menos comprada desde el store
-const leastPurchasedCategory = computed(() => serviceStore.leastPurchasedCategory);
+const leastPurchasedCategory = computed(() => serviceStore.getLeastPurchasedCategory());
 
 </script>
 <template>

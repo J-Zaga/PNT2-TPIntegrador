@@ -9,19 +9,19 @@ export const useServiceStore = defineStore('services', () => {
   onMounted(async () => {
     try {
       const { data } = await ServicesAPI.all();
-      services.value = data;
+      services.value = data
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   });
 
   // Función para agregar un nuevo servicio
   const addService = async (service) => {
     try {
-      const { data } = await ServicesAPI.post(service);
-      services.value.push(data);
+      const { data } = await ServicesAPI.post(service)
+      services.value.push(data)
     } catch (error) {
-      console.error("Error al agregar servicio:", error);
+      console.error("Error al agregar servicio:", error)
     }
   };
 
@@ -52,9 +52,12 @@ export const useServiceStore = defineStore('services', () => {
     );
   });
 
+  const getServices = () => services.value
+  const getLeastPurchasedCategory = () => leastPurchasedCategory.value
+
   return {
-    services,
+    getServices,
     addService,
-    leastPurchasedCategory, // Exponemos la propiedad computada para que se pueda usar en los componentes
+    getLeastPurchasedCategory,
   };
 });
