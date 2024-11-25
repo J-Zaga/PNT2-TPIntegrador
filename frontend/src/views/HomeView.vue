@@ -1,6 +1,9 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useServiceStore } from '@/stores/services';
+
+const currentIndex = ref(0);
+const totalSlides = 4;
 
 // Estado para controlar la visibilidad del banner
 const isBannerVisible = ref(true);
@@ -15,6 +18,22 @@ const serviceStore = useServiceStore();
 
 // Acceder a la categoría menos comprada desde el store
 const leastPurchasedCategory = computed(() => serviceStore.getLeastPurchasedCategory());
+
+const nextSlide = () => {
+  currentIndex.value = (currentIndex.value + 1) % totalSlides;
+};
+const prevSlide = () => {
+  currentIndex.value = (currentIndex.value - 1 + totalSlides) % totalSlides;
+};
+
+let interval;
+onMounted(() => {
+  interval = setInterval(nextSlide, 4000)
+});
+
+onUnmounted(() => {
+  clearInterval(interval)
+});
 
 </script>
 <template>
