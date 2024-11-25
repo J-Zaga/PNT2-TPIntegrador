@@ -27,11 +27,24 @@ export const useAppointmentsStore = defineStore('appointments', () => {
         return services.value.reduce((total, service) => total + service.precio, 0)
     })
 
+    const getTotalAmount = () => totalAmount.value
+
+    const getNoServicesSelected = () => noServicesSelected.value
+
+    const getIsServiceSelected = (id) => {
+        return isServiceSelected.value(id)
+    }
+
+    const getServices = () => services.value
+    
+    const resetServices = () => services.value = []
+
     return {
         onServiceSelected,
-        isServiceSelected,
-        services,
-        totalAmount,
-        noServicesSelected
+        getIsServiceSelected,
+        getServices,
+        resetServices,
+        getTotalAmount,
+        getNoServicesSelected,
     }
 })

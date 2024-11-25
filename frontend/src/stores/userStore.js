@@ -30,6 +30,7 @@ export const useUserStore = defineStore('users', () => {
         }
     }
     const getUsers = () => users.value
+    
     const getUsuarioRegistrado = () => usuarioRegistrado.value
 
     return {

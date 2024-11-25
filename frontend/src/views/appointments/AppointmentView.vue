@@ -14,7 +14,7 @@ const appointments = useAppointmentsStore()
 async function confirmPurchase() {
     const fechaDeCompra = new Date().toISOString();  // La fecha de compra en formato ISO
 
-    appointments.services.forEach(service => {
+    appointments.getServices().forEach(service => {
         if (!usuarioActual.value.serviciosComprados.some(s => s._id === service._id)) {
             service.fechaDeCompra = fechaDeCompra;  // Asignar la fecha de compra al servicio
             usuarioActual.value.serviciosComprados.push(service);  // Añadir el servicio a la lista de servicios comprados
@@ -23,7 +23,7 @@ async function confirmPurchase() {
 
     try {
         // Actualizar cada servicio en la base de datos de servicios con la fecha de compra
-        await Promise.all(appointments.services.map(service => {
+        await Promise.all(appointments.getServices().map(service => {
             return ServicesAPI.update(service._id, { fechaDeCompra });
         }));
 
@@ -32,7 +32,7 @@ async function confirmPurchase() {
             serviciosComprados: usuarioActual.value.serviciosComprados
         });
 
-        appointments.services = [];  // Limpiar los servicios después de la compra
+        appointments.resetServices()  // Limpiar los servicios después de la compra
         alert('¡Compra confirmada con éxito!');
     } catch (error) {
         console.error('Error al actualizar en la base de datos:', error);
@@ -48,16 +48,16 @@ async function confirmPurchase() {
 
     <h3 class="text-3xl font-extrabold text-gray-700">Servicios</h3>
 
-    <p v-if="appointments.noServicesSelected" class="text-gray-700 text-2xl text-center">No hay servicios seleccionados</p>
+    <p v-if="appointments.getNoServicesSelected()" class="text-gray-700 text-2xl text-center">No hay servicios seleccionados</p>
 
     <div v-else class="grid gap-5">
         <SelectedService 
-            v-for="service in appointments.services"
+            v-for="service in appointments.getServices()"
             :key="service._id"
             :service="service"
         />
         <p class="text-right text-gray-700 text-2xl">Total a pagar: 
-            <span class="font-black">{{ formatCurrency(appointments.totalAmount) }}</span>
+            <span class="font-black">{{ formatCurrency(appointments.getTotalAmount()) }}</span>
         </p>
         
         <div class="mt-5 text-right">

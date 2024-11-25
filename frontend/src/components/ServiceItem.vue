@@ -24,7 +24,7 @@ defineProps({
 <template>
     <div
         class="relative p-5 rounded-lg cursor-pointer bg-cover bg-center"
-        :class="appointments.isServiceSelected(service._id) ? 'bg-black opacity-100 text-white' : 'bg-black opacity-65 text-white'"
+        :class="appointments.getIsServiceSelected(service._id) ? 'bg-black opacity-100 text-white' : 'bg-black opacity-65 text-white'"
         :style="{ backgroundImage: `url(${randomImage})` }"
         @click="appointments.onServiceSelected(service)"
     >
@@ -34,7 +34,7 @@ defineProps({
 
             <p class="text-4xl font-light text-white" style="text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black, 1px 1px 2px black;">{{ service.categoria }}</p>
 
-            <p :class="appointments.isServiceSelected(service._id) ? 'text-violet-500' : 'text-white'" class="text-4xl font-black" style="text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black, 1px 1px 2px black;">
+            <p :class="appointments.getIsServiceSelected(service._id) ? 'text-violet-500' : 'text-white'" class="text-4xl font-black" style="text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black, 1px 1px 2px black;">
                {{ formatCurrency(service.precio) }}
             </p>
         </div>
